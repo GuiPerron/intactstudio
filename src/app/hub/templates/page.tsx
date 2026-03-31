@@ -1,4 +1,5 @@
 import { NavBar } from "@/components/layout/NavBar";
+import { AgentToggle } from "@/components/agent/AgentToggle";
 
 const TEMPLATES = [
   { id: 1, name: "Banner habitation 728x90", brand: "intact", format: "Banner", preview: "bg-[#F7F2EA]" },
@@ -144,6 +145,7 @@ export default function TemplateEditorPage() {
           </div>
         </div>
       </div>
+      <AgentToggle />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { NavBar } from "@/components/layout/NavBar";
+import { AgentToggle } from "@/components/agent/AgentToggle";
 
 const INTACT_TEMPLATES = [
   { name: "Banner habitation — 728x90", format: "Banner", updated: "Hier" },
@@ -178,6 +179,7 @@ export default function IntactTeamPage() {
           </div>
         </div>
       </div>
+      <AgentToggle />
     </div>
   );
 }

@@ -1,13 +1,148 @@
-"use client";
-
 import { NavBar } from "@/components/layout/NavBar";
-import { BrainstormPanel } from "@/components/brainstorm/BrainstormPanel";
+import { AgentToggle } from "@/components/agent/AgentToggle";
+import Link from "next/link";
 
-export default function Home() {
+const QUICK_TOOLS = [
+  { icon: "📋", label: "Brief Creator", description: "Créer un brief créatif adaptatif propulsé par l'AI", href: "/brief", featured: true },
+  { icon: "📐", label: "Template Editor", description: "Créer et éditer des templates on-brand", href: "/hub/templates" },
+  { icon: "🧩", label: "Micro-apps", description: "Outils spécialisés pour chaque besoin créatif", href: "/hub/micro-apps" },
+  { icon: "👥", label: "Team Pages", description: "Pages d'équipe avec agent AI dédié", href: "/hub/team/intact" },
+];
+
+const RECENT_ACTIVITY = [
+  { asset: "Campagne Habitation Q2 — Banner 728x90", brand: "intact", user: "Sarah M.", time: "Il y a 12 min" },
+  { asset: "Story Instagram — Promo automerit", brand: "belairdirect", user: "Marc-André L.", time: "Il y a 45 min" },
+  { asset: "Email — Renouvellement auto", brand: "intact", user: "Julie P.", time: "Il y a 1h" },
+  { asset: "Post LinkedIn — Chevalier été", brand: "belairdirect", user: "Dominique R.", time: "Il y a 2h" },
+  { asset: "Landing page — Assurance locataire", brand: "intact", user: "Sarah M.", time: "Il y a 3h" },
+];
+
+const TEAMS = [
+  { name: "Intact Brand", agent: "Mia", lead: "Mia Chen", color: "#DF0030", members: 3, templates: 24, href: "/hub/team/intact" },
+  { name: "belairdirect", agent: "Fred", lead: "Fred Lavoie", color: "#0F68D8", members: 2, templates: 18, href: "#" },
+  { name: "Sponsorship", agent: "Martine", lead: "Martine Dubois", color: "#2D716F", members: 1, templates: 8, href: "#" },
+  { name: "Acquisition", agent: "Solène", lead: "Solène Roy", color: "#7E6484", members: 2, templates: 12, href: "#" },
+];
+
+export default function Dashboard() {
   return (
-    <div className="flex h-screen flex-col" style={{ backgroundColor: "var(--platform-sand)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--platform-sand)" }}>
       <NavBar />
-      <BrainstormPanel />
+
+      <div className="mx-auto max-w-[1280px] px-6 py-8">
+        {/* Welcome */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Bonjour, <span style={{ color: "var(--platform-accent)" }}>Guillaume</span>
+          </h1>
+          <p className="mt-1 text-sm text-[var(--platform-muted)]">
+            Creative & Brand Studio — 4 équipes, 2 marques, 1 plateforme.
+          </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <StatCard value="147" label="Assets créés ce mois" trend="+12%" />
+          <StatCard value="94%" label="Score conformité marque" trend="+3%" />
+          <StatCard value="62" label="Templates actifs" trend="+5" />
+        </div>
+
+        {/* Quick tools */}
+        <div className="mb-8">
+          <h2 className="text-sm font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-4">
+            Accès rapide
+          </h2>
+          <div className="grid grid-cols-4 gap-4">
+            {QUICK_TOOLS.map((tool) => (
+              <Link
+                key={tool.label}
+                href={tool.href}
+                className={`group rounded-xl border p-5 transition-all duration-200 hover:shadow-md ${
+                  tool.featured
+                    ? "bg-[var(--platform-accent)] border-[var(--platform-accent)] text-white"
+                    : "bg-white border-[var(--platform-border)] hover:border-[var(--platform-muted)]"
+                }`}
+              >
+                <span className="text-2xl">{tool.icon}</span>
+                <h3 className="mt-3 text-sm font-semibold">{tool.label}</h3>
+                <p className={`mt-1 text-xs leading-relaxed ${tool.featured ? "text-white/80" : "text-[var(--platform-muted)]"}`}>
+                  {tool.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-6">
+          {/* Activity */}
+          <div className="col-span-2">
+            <h2 className="text-sm font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-4">
+              Activité récente
+            </h2>
+            <div className="rounded-xl bg-white border border-[var(--platform-border)] divide-y divide-[var(--platform-border)]">
+              {RECENT_ACTIVITY.map((item, i) => (
+                <div key={i} className="flex items-center gap-4 px-5 py-3.5">
+                  <div
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: item.brand === "intact" ? "#DF0030" : "#0F68D8" }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{item.asset}</p>
+                    <p className="text-xs text-[var(--platform-muted)]">{item.user} · {item.time}</p>
+                  </div>
+                  <span className="text-xs text-[var(--platform-muted)] shrink-0">
+                    {item.brand === "intact" ? "Intact" : "belairdirect"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Teams */}
+          <div>
+            <h2 className="text-sm font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-4">
+              Équipes
+            </h2>
+            <div className="space-y-3">
+              {TEAMS.map((team) => (
+                <Link
+                  key={team.name}
+                  href={team.href}
+                  className="block rounded-xl bg-white border border-[var(--platform-border)] p-4 transition-all duration-200 hover:shadow-sm hover:border-[var(--platform-muted)]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                      style={{ backgroundColor: team.color }}
+                    >
+                      {team.agent[0]}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold">{team.name}</p>
+                      <p className="text-xs text-[var(--platform-muted)]">{team.lead} · {team.members} membres</p>
+                    </div>
+                    <span className="text-xs text-[var(--platform-muted)]">{team.templates} templates</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <AgentToggle />
+    </div>
+  );
+}
+
+function StatCard({ value, label, trend }: { value: string; label: string; trend: string }) {
+  return (
+    <div className="rounded-xl bg-white border border-[var(--platform-border)] p-5">
+      <div className="flex items-baseline gap-2">
+        <span className="text-3xl font-bold tracking-tight">{value}</span>
+        <span className="text-xs font-medium text-green-600">{trend}</span>
+      </div>
+      <p className="mt-1 text-xs text-[var(--platform-muted)]">{label}</p>
     </div>
   );
 }

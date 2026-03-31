@@ -1,4 +1,5 @@
 import { NavBar } from "@/components/layout/NavBar";
+import { AgentToggle } from "@/components/agent/AgentToggle";
 
 const MICRO_APPS = [
   {
@@ -103,6 +104,7 @@ export default function MicroAppsPage() {
           ))}
         </div>
       </div>
+      <AgentToggle />
     </div>
   );
 }

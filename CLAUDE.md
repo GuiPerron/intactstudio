@@ -45,9 +45,26 @@ AI-native creative platform for IFC's (Intact Financial Corporation) Creative & 
 
 ---
 
-### Brainstorm methodology
+### Brainstorm = CREATIVE TOOL DEMO (not feedback collection)
 
-The brainstorm works like a real collaborative working session (the way a designer and a client would brainstorm a project together). The AI agent LEADS with proposals, but it also LISTENS and RECORDS. Every client reaction is data for the project.
+**The pivot:** The brainstorm is NOT a meta-discussion about what the platform should be. It's a LIVE DEMO where the client actually USES the AI to create something real. The client leaves the session with a tangible deliverable — a complete creative brief or a fleshed-out campaign concept.
+
+**Two paths (client chooses at the start):**
+
+**Path A — Create a Brief**
+The client uses the AI to build a creative brief from scratch. The agent asks the right questions (objective, brand, audience, deliverables, timeline), proposes creative angles, switches between brand voices to demonstrate, and produces a structured, exportable brief at the end. This is the Brief Creator micro-app — live and functional.
+
+**Path B — Brainstorm a Campaign Concept**
+The client describes a need ("we need a summer 2026 campaign for belairdirect, conversion-focused, multi-channel") and the AI helps develop the concept: creative theme, key messages, tone direction, channel strategy, visual references. The agent demonstrates brand knowledge by adapting proposals to the correct brand voice and guidelines.
+
+**Why this is better than the old approach:**
+- The client USES the tool instead of TALKING ABOUT it
+- They leave with a real deliverable (brief or concept)
+- It demonstrates AI capability through action, not discussion
+- No risk of the AI saying something off-brand during a "free brainstorm" — the conversation is structured around creation
+- The demo sells itself — if the client likes what the AI produced, the project is approved
+
+### Brainstorm methodology
 
 - Ask ONE question at a time — don't overwhelm
 - For each topic: propose 2-3 concrete approaches with trade-offs, explain the recommended one, let the client react
@@ -194,19 +211,16 @@ The platform UI draws from intact.ca's current design language. Key patterns to 
 
 ## Architecture
 
-### Phase 1 prototype: Two entry points via top navigation
+### Phase 1 prototype: Hub-first experience
 
-The prototype has a top navigation bar with two main sections the client can explore independently:
+The client arrives directly on the **Hub Studio dashboard** — the platform as it would look in daily use. No separate "brainstorm" entry point. The Hub IS the experience. From the dashboard, the client can explore different tools and screens. Most screens are static mockups (beautiful but non-functional), except:
 
-1. **Brainstorm** — The AI-powered brainstorm session (real Claude API conversation). This is the main experience — see brainstorm methodology above.
+- **Brief Creator** — FUNCTIONAL. The client can actually create a brief using the adaptive form (triage → adaptive fields → AI validation). This is the star interactive demo.
+- **AI Agent sidebar** — FUNCTIONAL. A chat panel (Claude API, streaming) is always available. The client can brainstorm a campaign concept, ask questions about the platform, or get help with the brief. This demonstrates the AI's brand knowledge live.
 
-2. **Hub Studio** — A static mockup of the platform as it would look in daily use. This is NOT functional — it's a visual maquette showing the product vision. Beautiful UI, realistic content, but no working backend.
+Everything else (Template Editor, Micro-apps Catalog, Team Pages) is a pixel-perfect mockup — it shows what the platform WOULD look like, but buttons don't submit, forms don't save.
 
-The nav lets the client switch between the two at any time.
-
-### Hub Studio mockup screens (static UI — NO backend)
-
-The Hub Studio section contains 4 mockup screens. These are purely visual — they show what the platform WOULD look like, but nothing actually works. Buttons don't submit, forms don't save, the AI doesn't respond. It's a pixel-perfect vision of the product.
+### Hub Studio screens
 
 **Screen 1 — Dashboard (homepage after login)**
 - Welcome header with user name and team
@@ -231,7 +245,7 @@ The Hub Studio section contains 4 mockup screens. These are purely visual — th
   - Chevalier Generator — "Generate Little Knight poses for belairdirect" (with small knight illustration)
   - A/B Factory — "Create A/B test variants from a single template"
   - Brand Checker — "Validate any asset against brand guidelines"
-  - Brief Creator — "Generate creative briefs from a conversation"
+  - Brief Creator — "AI-powered adaptive creative briefs" (IMPORTANT — see detailed spec below)
   - Image Gen — "AI-powered image generation, on-brand"
 - Some cards marked "Coming soon" with a subtle badge
 - Each card uses brand-appropriate styling (belairdirect cards might have a subtle blue accent, Intact cards a red one)
@@ -244,6 +258,44 @@ The Hub Studio section contains 4 mockup screens. These are purely visual — th
 - Quick-access to Intact-specific tools and guidelines
 - Everything is Intact-branded: red brackets, Soothing Sand backgrounds, Intact typography
 - A small note/badge: "Each team has its own page with its own AI agent and brand-specific tools"
+
+### Brief Creator — Detailed spec (key micro-app)
+
+The Brief Creator is one of the most important micro-apps. Briefs are a universal pain point in creative teams — they're often incomplete, vague, or in the wrong format. Studio AI solves this with an adaptive, AI-assisted brief builder.
+
+**How it works:**
+
+**Step 1 — Triage (3 quick questions, card-based):**
+1. "C'est quoi l'objectif?" — Notoriété / Conversion / Engagement / Lancement / Interne
+2. "C'est urgent?" — ASAP (5 jours) / 2 semaines / Flexible
+3. "Quel volume?" — Petit (1-3 assets, un canal) / Moyen (5-15 assets, multi-canal) / Grand (Campagne complète, déclinaisons)
+
+These 3 answers DETERMINE which fields appear in the brief form. This is the key differentiator — the brief adapts to the request type.
+
+**Step 2 — Adaptive brief form (changes based on triage):**
+- Projet & demandeur (project name, requester name + team)
+- Marque & marché (brand chips: belairdirect, Intact Insurance, IFC, etc. + province/language chips: QC FR, QC EN, ON, AB, etc.)
+- Ton brief (free text area — context, objectives, ideas, audience, key message)
+- De quoi as-tu besoin? (selectable list that adapts: Design, Motion video, Creative strategy, Landing page, Illustrations, Copy, UGC)
+  - **If Copy is selected** → additional fields appear: tone, key messages, word count, reference materials
+  - **If Motion video is selected** → additional fields: duration, format (reel, TVC, social), storyboard notes, voiceover needs
+  - **If Campagne complète** → all deliverable fields appear, plus campaign timeline, cross-channel requirements
+- Specs & deadline (date picker, channels & sizes, notes & references)
+
+**Step 3 — AI validation:**
+- Completion indicator (0% → 100%) that checks all required fields
+- AI reviews the brief and flags gaps: "Ton brief ne mentionne pas l'audience cible — veux-tu l'ajouter?"
+- "Brainstorm" button on each section — AI can help fill in sections conversationally
+- "Voir le récapitulatif" — clean summary view of the complete brief, exportable
+
+**Why it matters for Studio AI:**
+- Eliminates back-and-forth ("le brief était pas clair")
+- Guarantees complete briefs every time
+- AI assists people who don't know how to write a good brief
+- Brand context is pre-loaded (the brand chips auto-load the right guidelines)
+- The brief feeds directly into the Template Editor and AI Agent for production
+
+**Reference:** See guip.ca/brief for the UI pattern and flow inspiration.
 
 ### Important for Hub Studio mockup screens:
 - Use REALISTIC content — real-looking ad copy, plausible team member names, believable stats

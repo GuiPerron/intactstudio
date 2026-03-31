@@ -13,10 +13,13 @@ Last updated: 2026-03-30
 ## Key Decisions Made
 
 ### Architecture
-- Two surfaces: Hub Studio (all IFC) + Team Pages (per swimlane)
+- Hub-first experience: client arrives on Dashboard, navigates to tools from there
+- Two FUNCTIONAL features: Brief Creator (adaptive form) + AI Agent sidebar (Claude API chat)
+- Everything else = pixel-perfect mockups (Template Editor, Micro-apps Catalog, Team Page)
+- NO separate "brainstorm" entry — the AI sidebar IS the brainstorm tool
 - Phase 1 is a VISION VALIDATION prototype, NOT a functional app
 - Goal: WOW the client into greenlighting the full build
-- Template editor = core feature to showcase (live preview, editable content, pre-approved options)
+- Brief Creator = star feature (adaptive form inspired by guip.ca/brief)
 
 ### Design
 - Platform aesthetic: Minimal white, black text, red accent #D11338. NOT dark mode.
