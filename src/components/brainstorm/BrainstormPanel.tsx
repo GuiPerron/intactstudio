@@ -57,9 +57,7 @@ function detectPhase(messageCount: number, content: string): StepId {
 }
 
 // ── Quick reply suggestions per phase ──
-function getQuickReplies(phase: StepId, messageCount: number): string[] {
-  if (messageCount <= 1) return [];
-
+function getQuickReplies(phase: StepId, _messageCount: number): string[] {
   switch (phase) {
     case "intro":
       return [
