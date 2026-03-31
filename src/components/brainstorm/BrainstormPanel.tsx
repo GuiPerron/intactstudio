@@ -62,35 +62,41 @@ function getQuickReplies(phase: StepId, messageCount: number): string[] {
 
   switch (phase) {
     case "intro":
-      return ["On est prêts, allons-y!"];
+      return [
+        "C'est la cohérence entre Intact et belairdirect",
+        "Les tâches répétitives et les adaptations FR/EN",
+        "Le onboarding des nouveaux employés est un cauchemar",
+      ];
     case "discovery":
       return [
-        "La cohérence entre les deux marques est notre plus gros défi",
-        "Les adaptations bilingues prennent énormément de temps",
-        "On passe trop de temps sur les tâches répétitives",
+        "Oui, c'est exactement ça",
+        "Ça arrive tout le temps, surtout avec les nouvelles recrues",
+        "Notre plus gros problème c'est plutôt...",
+        "On perd beaucoup de temps là-dessus",
       ];
     case "features":
       return [
-        "Montre-moi comment ça fonctionne",
-        "Est-ce que ça gère le bilinguisme?",
-        "Qu'est-ce que tu proposes pour belairdirect?",
+        "Oui, l'équipe utiliserait ça quotidiennement",
+        "Montre-moi un autre exemple",
+        "C'est intéressant mais pas prioritaire",
+        "On a besoin de ça, mais en plus simple",
       ];
     case "surprise":
       return [
+        "Wow, je savais pas que c'était possible",
         "Qu'est-ce que tu peux faire d'autre?",
-        "Et pour les campagnes multicanal?",
-        "Montre-moi le brand checker",
+        "Passons aux priorités",
       ];
     case "priorities":
       return [
-        "Le template editor en premier",
-        "La génération de contenu AI est la priorité",
-        "Montre-moi le classement interactif",
+        "Le template editor, c'est la priorité #1",
+        "La génération de contenu en premier",
+        "Le brand checker en premier",
       ];
     case "summary":
       return [
         "Prépare le résumé",
-        "J'ai une dernière question",
+        "Parfait, on a tout couvert",
       ];
     default:
       return [];
