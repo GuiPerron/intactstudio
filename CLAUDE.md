@@ -55,11 +55,29 @@ The brainstorm works like a real collaborative working session (the way a design
 - The agent recommends an approach and explains WHY — it has an opinion, not just options
 - Quick-reply chips can help guide the conversation, but the text input is always available
 
+### Client context the agent MUST know
+
+The brainstorm agent must have deep knowledge of the Creative & Brand Studio to ask relevant questions and suggest realistic pain points. This context goes in the agent's system prompt:
+
+- **Team:** Creative & Brand Studio — 7 people + 2 open positions
+- **4 swimlanes:** Intact Brand, belairdirect, Sponsorship, Acquisition/Growth
+- **Two distinct brands:** Intact (broker, warm, sophisticated) and belairdirect (direct-to-consumer, accessible, playful)
+- **Real team challenges:**
+  - Brand consistency between Intact and belairdirect (very different guidelines, tone/visual errors)
+  - Repetitive tasks: FR/EN adaptations, multi-format variations (social, banner, email), asset resizing
+  - High production volume for a small team (7 people, two brands, 4 swimlanes)
+  - No centralized tool — everything scattered (Figma, emails, Teams, shared folders)
+  - Brand guidelines exist but are in 50+ page PDFs nobody checks daily
+  - Each swimlane has specific needs but shares the same generic tools
+  - Content production often blocked by back-and-forth approval cycles
+
+Quick-reply chip suggestions must reflect these REAL challenges. Good examples: "Brand consistency between Intact and belairdirect", "Multi-format and FR/EN adaptations take forever", "Production volume vs team size". Bad examples: ❌ "Employee onboarding" (this isn't HR), ❌ "Marketing budget" (this isn't finance).
+
 ### The flow (6 phases, ~15-25 min total)
 
 1. **Introduction** (~1 min) — Agent introduces itself AND the session format. Sets expectations: "We're going to brainstorm together what Studio AI should be. I'll propose ideas, show you demos, and capture your feedback. At the end, you'll get a clean summary of everything we decided. Just type your thoughts — there's no wrong answer."
 
-2. **Pain points discovery** (~3-5 min) — Agent asks about current workflow challenges ONE AT A TIME. Example: "To start — what's the single most time-consuming repetitive task your team deals with?" Then follows up based on the answer. Goes deeper before moving on: "How often does that happen? Every week? Every day?"
+2. **Pain points discovery** (~3-5 min) — Agent asks about current workflow challenges ONE AT A TIME. Example: "As a creative team managing two distinct brands — Intact and belairdirect — what's the biggest challenge you face daily in content production?" Quick-reply chips: "Brand consistency between the two brands" / "Multi-format FR/EN adaptations" / "Production volume vs team size". Then follows up based on the answer. Goes deeper: "How does that manifest concretely? Is it more tone errors, visual errors, or both?"
 
 3. **Feature proposals with live demos** (~5-8 min) — Based on pain points discussed, agent PROPOSES specific solutions. For each: explains it in 2-3 sentences, shows an inline demo/preview component, asks for the client's reaction. Example: "Based on what you said about brand consistency issues, I think a Brand Checker could help. Watch this —" [inline demo of brand checker analyzing a fake asset] "— What do you think? Would your team use something like this?"
 

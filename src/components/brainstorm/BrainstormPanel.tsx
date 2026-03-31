@@ -63,8 +63,8 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
   if (userMsgCount === 0) {
     return [
       "La cohérence entre Intact et belairdirect",
-      "Les tâches répétitives et adaptations FR/EN",
-      "Le onboarding des nouveaux est un cauchemar",
+      "Les déclinaisons multi-format et FR/EN prennent un temps fou",
+      "Le volume de production vs la taille de l'équipe",
     ];
   }
 
@@ -73,14 +73,14 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
     if (userMsgCount === 1) {
       return [
         "Surtout les erreurs de ton entre les deux marques",
-        "C'est quotidien, ça impacte toute l'équipe",
-        "Les deux, ton et visuel",
+        "Les guidelines sont dans des PDFs que personne ne consulte",
+        "Les deux — ton et visuels",
       ];
     }
     return [
       "Oui c'est exactement ça",
       "On peut passer aux solutions?",
-      "J'aimerais voir ce que tu proposes",
+      "Tout est éparpillé entre Figma, Teams et les emails",
     ];
   }
 

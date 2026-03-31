@@ -36,6 +36,32 @@ Le brainstorm est un CHAT AI en temps réel. Le client TAPE ses réponses. L'age
 ✅ Un state caché qui capture chaque préférence/réaction/décision au fil de la conversation
 ✅ Un résumé structuré exportable généré à la fin à partir de ces données
 
+### CONTEXTE CLIENT QUE L'AGENT DOIT CONNAÎTRE
+
+L'agent brainstorm DOIT connaître le contexte du Creative & Brand Studio pour poser des questions pertinentes et proposer des suggestions réalistes. Ce contexte doit être dans le system prompt de l'agent :
+
+- **Équipe :** Creative & Brand Studio — 7 personnes + 2 postes ouverts
+- **4 swimlanes :** Intact Brand, belairdirect, Sponsorship, Acquisition/Growth
+- **Deux marques distinctes :** Intact (broker, chaleureux, sophistiqué) et belairdirect (direct-to-consumer, accessible, playful)
+- **Défis réels de l'équipe :**
+  - Cohérence de marque entre Intact et belairdirect (guidelines très différentes, erreurs de ton/visuels)
+  - Tâches répétitives : adaptations FR/EN, déclinaisons multi-format (social, banner, email), resize d'assets
+  - Volume de production élevé pour une petite équipe (7 personnes, deux marques, 4 swimlanes)
+  - Pas d'outil centralisé — tout est éparpillé (Figma, emails, Teams, dossiers partagés)
+  - Les guidelines de marque existent mais sont dans des PDF de 50+ pages que personne ne consulte au quotidien
+  - Chaque swimlane a ses propres besoins spécifiques mais partage les mêmes outils génériques
+  - La production de contenu est souvent bloquée par les allers-retours de validation
+
+**Les quick-reply chips doivent refléter ces vrais défis.** Exemples de BONNES suggestions pour la première question :
+- "La cohérence entre Intact et belairdirect"
+- "Les adaptations multi-format et FR/EN qui prennent un temps fou"
+- "Le volume de production vs la taille de l'équipe"
+
+Exemples de MAUVAISES suggestions (hors contexte) :
+- ❌ "Le onboarding des nouveaux employés" (on n'est pas aux RH)
+- ❌ "Le budget marketing" (on n'est pas en finance)
+- ❌ "La communication interne" (on n'est pas aux communications)
+
 ### LE FLOW EN 6 PHASES (~15-25 min total)
 
 **Phase 1 — Introduction (~1 min)**
@@ -43,9 +69,10 @@ L'agent se présente et explique le format. Donne le ton : "On va brainstormer e
 
 **Phase 2 — Découverte des pain points (~3-5 min)**
 L'agent pose des questions OUVERTES, une à la fois. Exemple :
-- "Pour commencer — c'est quoi LA tâche répétitive qui prend le plus de temps à votre équipe chaque semaine?"
-- [Le client tape sa réponse]
-- L'agent creuse : "Ça arrive à quelle fréquence? Chaque jour? Et c'est qui dans l'équipe qui gère ça principalement?"
+- "En tant qu'équipe créative qui gère deux marques distinctes — Intact et belairdirect — quel est le plus gros défi que vous vivez au quotidien dans la production de contenu?"
+- Quick-reply chips : "La cohérence entre les marques" / "Les déclinaisons multi-format FR/EN" / "Le volume vs la taille de l'équipe"
+- [Le client tape sa réponse OU clique un chip]
+- L'agent creuse : "Ça se manifeste comment concrètement? C'est plutôt des erreurs de ton, de visuels, ou les deux?"
 - Puis passe à la question suivante basée sur la réponse
 
 **Phase 3 — Propositions de features avec démos live (~5-8 min)**
