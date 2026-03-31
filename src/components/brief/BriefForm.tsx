@@ -46,12 +46,20 @@ const LABELS: Record<string, string> = {
   grand: "🎪 Grand",
 };
 
+interface FieldStatus {
+  label: string;
+  filled: boolean;
+  value?: string;
+}
+
 export function BriefForm({ triage, onBack }: BriefFormProps) {
   const [brands, setBrands] = useState<Set<string>>(new Set());
   const [markets, setMarkets] = useState<Set<string>>(new Set());
   const [deliverables, setDeliverables] = useState<Set<string>>(new Set());
   const [selectedFormats, setSelectedFormats] = useState<Set<string>>(new Set());
   const [briefText, setBriefText] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [requester, setRequester] = useState("");
   const [showSummary, setShowSummary] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
 
@@ -62,71 +70,118 @@ export function BriefForm({ triage, onBack }: BriefFormProps) {
     setFn(next);
   };
 
-  const completion = Math.min(
-    100,
-    (brands.size > 0 ? 15 : 0) +
-    (markets.size > 0 ? 10 : 0) +
-    (deliverables.size > 0 ? 20 : 0) +
-    (briefText.length > 20 ? 15 : 0) +
-    40 // triage already done
-  );
+  // Field-by-field completion tracking
+  const fields: FieldStatus[] = [
+    { label: "Objectif / Urgence / Scope", filled: true, value: `${LABELS[triage.objective]} · ${LABELS[triage.urgency]} · ${LABELS[triage.volume]}` },
+    { label: "Projet", filled: projectName.length > 0, value: projectName },
+    { label: "Demandeur", filled: requester.length > 0, value: requester },
+    { label: "Marque(s)", filled: brands.size > 0, value: Array.from(brands).join(", ") },
+    { label: "Provinces / Langues", filled: markets.size > 0, value: Array.from(markets).join(", ") },
+    { label: "Brief", filled: briefText.length > 20, value: briefText },
+    { label: "Livrables", filled: deliverables.size > 0, value: Array.from(deliverables).map((d) => DELIVERABLES.find((x) => x.id === d)?.label).join(", ") },
+  ];
+
+  const filledCount = fields.filter((f) => f.filled).length;
+  const completion = Math.round((filledCount / fields.length) * 100);
 
   if (showSummary) {
+    const isComplete = completion === 100;
     return (
       <div>
-        <div className="rounded-xl bg-white border border-[var(--platform-border)] overflow-hidden">
-          <div className="px-6 py-4 border-b border-[var(--platform-border)]" style={{ backgroundColor: "var(--platform-sand)" }}>
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold">Récapitulatif du brief</h2>
-              <button
-                onClick={() => {
-                  const blob = new Blob(["# Brief Studio AI\n\nExporté depuis la plateforme."], { type: "text/markdown" });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = "brief-studio-ai.md";
-                  a.click();
-                }}
-                className="rounded-full px-4 py-2 text-sm font-medium text-white"
-                style={{ backgroundColor: "var(--platform-accent)" }}
-              >
-                Exporter le brief
-              </button>
-            </div>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowSummary(false)} className="text-[var(--platform-muted)] hover:text-[var(--platform-text)]">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4L6 10L12 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <h2 className="text-xl font-semibold">Récapitulatif</h2>
           </div>
-          <div className="p-6 space-y-4">
-            <div>
-              <p className="text-xs font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">Triage</p>
-              <div className="flex flex-wrap gap-2">
-                {[triage.objective, triage.urgency, triage.volume].map((v) => (
-                  <span key={v} className="rounded-full px-3 py-1 text-xs font-medium border border-[var(--platform-border)]">
-                    {LABELS[v] || v}
-                  </span>
-                ))}
-              </div>
-            </div>
-            {brands.size > 0 && (
-              <div>
-                <p className="text-xs font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">Marques</p>
-                <p className="text-sm">{Array.from(brands).join(", ")}</p>
-              </div>
-            )}
-            {briefText && (
-              <div>
-                <p className="text-xs font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">Brief</p>
-                <p className="text-sm whitespace-pre-wrap">{briefText}</p>
-              </div>
-            )}
-            {selectedFormats.size > 0 && (
-              <div>
-                <p className="text-xs font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">Formats</p>
-                <p className="text-sm">{Array.from(selectedFormats).map((f) => FORMATS.find((x) => x.id === f)?.label).join(", ")}</p>
-              </div>
-            )}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => { navigator.clipboard.writeText(fields.map((f) => `${f.label}: ${f.value || "—"}`).join("\n")); }}
+              className="flex items-center gap-1.5 rounded-full border border-[var(--platform-border)] px-4 py-2 text-sm font-medium hover:border-[var(--platform-muted)]"
+            >
+              📋 Copier
+            </button>
+            <button
+              onClick={() => {
+                let md = `# Brief Studio AI\n\n`;
+                fields.forEach((f) => { md += `**${f.label}:** ${f.value || "Non renseigné"}\n\n`; });
+                if (selectedFormats.size > 0) md += `**Formats:** ${Array.from(selectedFormats).map((f) => FORMATS.find((x) => x.id === f)?.label).join(", ")}\n\n`;
+                const blob = new Blob([md], { type: "text/markdown" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url; a.download = "brief-studio-ai.md"; a.click();
+              }}
+              className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white"
+              style={{ backgroundColor: "var(--platform-accent)" }}
+            >
+              ⬇ Télécharger
+            </button>
           </div>
         </div>
-        <div className="mt-4 text-center">
-          <button onClick={() => setShowSummary(false)} className="text-sm text-[var(--platform-muted)]">← Retour au formulaire</button>
+
+        {/* Completion banner */}
+        <div
+          className="rounded-xl p-5 mb-6 flex items-center gap-4"
+          style={{ backgroundColor: isComplete ? "#F0FFF4" : "#FEF2F4", border: `1px solid ${isComplete ? "#009460" : "var(--platform-accent)"}20` }}
+        >
+          {/* Progress circle */}
+          <div className="relative w-14 h-14 shrink-0">
+            <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+              <circle cx="28" cy="28" r="24" fill="none" stroke={isComplete ? "#00946020" : "#D1133820"} strokeWidth="4" />
+              <circle cx="28" cy="28" r="24" fill="none" stroke={isComplete ? "#009460" : "var(--platform-accent)"} strokeWidth="4" strokeLinecap="round"
+                strokeDasharray={`${(completion / 100) * 150.8} 150.8`}
+              />
+            </svg>
+            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold" style={{ color: isComplete ? "#009460" : "var(--platform-accent)" }}>
+              {completion}%
+            </span>
+          </div>
+          <div>
+            <p className="text-sm font-semibold">{isComplete ? "Brief complet ✓" : "Brief incomplet"}</p>
+            <p className="text-xs text-[var(--platform-muted)]">
+              {isComplete ? "Tous les champs sont remplis. Prêt à envoyer!" : "Retourne en arrière pour compléter les champs manquants."}
+            </p>
+          </div>
+        </div>
+
+        {/* Fields */}
+        <div className="rounded-xl bg-white border border-[var(--platform-border)] divide-y divide-[var(--platform-border)]">
+          {fields.map((field) => (
+            <div key={field.label} className="flex items-start gap-3 px-5 py-4">
+              <div className="mt-0.5 shrink-0">
+                {field.filled ? (
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: "#00946015", color: "#009460" }}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                ) : (
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: "#D1133815", color: "var(--platform-accent)" }}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="1" fill="currentColor"/></svg>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: field.filled ? "var(--platform-muted)" : "var(--platform-accent)" }}>
+                  {field.label}
+                </p>
+                <p className="text-sm mt-0.5" style={{ color: field.filled ? "var(--platform-text)" : "var(--platform-accent)", fontStyle: field.filled ? "normal" : "italic" }}>
+                  {field.filled ? field.value : "Non renseigné"}
+                </p>
+              </div>
+            </div>
+          ))}
+          {selectedFormats.size > 0 && (
+            <div className="flex items-start gap-3 px-5 py-4">
+              <div className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "#00946015", color: "#009460" }}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-[var(--platform-muted)] uppercase tracking-wider">Formats</p>
+                <p className="text-sm mt-0.5">{Array.from(selectedFormats).map((f) => FORMATS.find((x) => x.id === f)?.label).join(", ")}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -146,15 +201,22 @@ export function BriefForm({ triage, onBack }: BriefFormProps) {
             ✏️ Modifier
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-24 h-2 rounded-full bg-[var(--platform-border)]">
-            <div
-              className="h-2 rounded-full transition-all duration-500"
-              style={{ width: `${completion}%`, backgroundColor: completion === 100 ? "#009460" : "var(--platform-accent)" }}
-            />
+        <div className="flex items-center gap-2 rounded-full border border-[var(--platform-border)] bg-white pl-1 pr-3 py-1">
+          <div className="relative w-7 h-7 shrink-0">
+            <svg className="w-7 h-7 -rotate-90" viewBox="0 0 28 28">
+              <circle cx="14" cy="14" r="11" fill="none" stroke="#E5E5E5" strokeWidth="2.5" />
+              <circle cx="14" cy="14" r="11" fill="none"
+                stroke={completion === 100 ? "#009460" : "var(--platform-accent)"}
+                strokeWidth="2.5" strokeLinecap="round"
+                strokeDasharray={`${(completion / 100) * 69.1} 69.1`}
+              />
+            </svg>
+            <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold" style={{ color: completion === 100 ? "#009460" : "var(--platform-muted)" }}>
+              {completion}
+            </span>
           </div>
           <span className="text-xs font-medium" style={{ color: completion === 100 ? "#009460" : "var(--platform-muted)" }}>
-            {completion}%
+            {completion}% complet
           </span>
         </div>
       </div>
@@ -162,8 +224,8 @@ export function BriefForm({ triage, onBack }: BriefFormProps) {
       <div className="space-y-6">
         {/* Projet & demandeur */}
         <Section title="Projet & demandeur">
-          <input type="text" placeholder="Nom du projet (ex: Campagne été 2026 belairdirect)" className="w-full rounded-lg border border-[var(--platform-border)] px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--platform-accent)]" />
-          <input type="text" placeholder="Ton nom + équipe (ex: Guillaume Perron, Marketing)" className="w-full rounded-lg border border-[var(--platform-border)] px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--platform-accent)] mt-3" />
+          <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} placeholder="Nom du projet (ex: Campagne été 2026 belairdirect)" className="w-full rounded-lg border border-[var(--platform-border)] px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--platform-accent)]" />
+          <input type="text" value={requester} onChange={(e) => setRequester(e.target.value)} placeholder="Ton nom + équipe (ex: Guillaume Perron, Marketing)" className="w-full rounded-lg border border-[var(--platform-border)] px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--platform-accent)] mt-3" />
         </Section>
 
         {/* Marque & marché */}
