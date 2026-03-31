@@ -48,6 +48,14 @@ export default function TemplateEditorPage() {
   const tokens = BRAND_TOKENS[activeBrand];
   const format = FORMAT_DIMENSIONS[activeFormat];
 
+  const canvasW = customWidth || format.width;
+  const canvasH = customHeight || format.height;
+  const maxPreviewW = 600;
+  const maxPreviewH = 650;
+  const scaleX = maxPreviewW / canvasW;
+  const scaleY = maxPreviewH / canvasH;
+  const scale = Math.min(scaleX, scaleY);
+
   const currentTemplateJson = useMemo(
     () => JSON.stringify(template, null, 2),
     [template]
@@ -142,16 +150,6 @@ export default function TemplateEditorPage() {
     link.href = canvas.toDataURL("image/png");
     link.click();
   }, [template.name, activeBrand]);
-
-  const canvasW = customWidth || format.width;
-  const canvasH = customHeight || format.height;
-
-  // Scale the preview to fit the available space
-  const maxPreviewW = 600;
-  const maxPreviewH = 650;
-  const scaleX = maxPreviewW / canvasW;
-  const scaleY = maxPreviewH / canvasH;
-  const scale = Math.min(scaleX, scaleY);
 
   const filteredTemplates = TEMPLATES;
 
