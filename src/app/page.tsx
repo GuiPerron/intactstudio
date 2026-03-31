@@ -3,10 +3,10 @@ import { AgentToggle } from "@/components/agent/AgentToggle";
 import Link from "next/link";
 
 const QUICK_TOOLS = [
-  { icon: "📋", label: "Brief Creator", description: "Créer un brief créatif adaptatif propulsé par l'AI", href: "/brief", featured: true },
+  { icon: "💡", label: "Brainstorm", description: "Brainstormer un concept de campagne avec l'AI", href: "/brainstorm", featured: true },
+  { icon: "📋", label: "Brief Creator", description: "Créer un brief créatif adaptatif propulsé par l'AI", href: "/brief" },
   { icon: "📐", label: "Template Editor", description: "Créer et éditer des templates on-brand", href: "/hub/templates" },
   { icon: "🧩", label: "Micro-apps", description: "Outils spécialisés pour chaque besoin créatif", href: "/hub/micro-apps" },
-  { icon: "👥", label: "Team Pages", description: "Pages d'équipe avec agent AI dédié", href: "/hub/team/intact" },
 ];
 
 const RECENT_ACTIVITY = [
