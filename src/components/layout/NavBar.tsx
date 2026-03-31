@@ -1,6 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const NAV_ITEMS = [
+  { label: "Brainstorm", href: "/" },
+  { label: "Hub Studio", href: "/hub" },
+  { label: "Templates", href: "/hub/templates" },
+  { label: "Micro-apps", href: "/hub/micro-apps" },
+];
+
 export function NavBar() {
+  const pathname = usePathname();
+
   return (
     <nav className="sticky top-0 z-50">
       {/* Utility bar */}
@@ -9,11 +21,9 @@ export function NavBar() {
           <span className="text-xs text-[var(--platform-muted)] tracking-wide">
             Intact Financial Corporation — Creative & Brand Studio
           </span>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-[var(--platform-muted)]">
-              Prototype v1
-            </span>
-          </div>
+          <span className="text-xs text-[var(--platform-muted)]">
+            Prototype v1
+          </span>
         </div>
       </div>
 
@@ -21,7 +31,7 @@ export function NavBar() {
       <div className="bg-white border-b border-[var(--platform-border)]">
         <div className="mx-auto max-w-[1280px] px-6 py-3 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-semibold tracking-tight">
               Studio
             </span>
@@ -31,31 +41,45 @@ export function NavBar() {
             >
               AI
             </span>
-          </div>
+          </Link>
 
           {/* Center nav */}
           <div className="hidden md:flex items-center gap-8">
-            <span className="text-sm font-medium text-[var(--platform-text)] border-b-2 border-[var(--platform-accent)] pb-0.5">
-              Brainstorm
-            </span>
-            <span className="text-sm text-[var(--platform-muted)] hover:text-[var(--platform-text)] transition-colors cursor-default opacity-40">
-              Hub Studio
-            </span>
-            <span className="text-sm text-[var(--platform-muted)] hover:text-[var(--platform-text)] transition-colors cursor-default opacity-40">
-              Templates
-            </span>
-            <span className="text-sm text-[var(--platform-muted)] hover:text-[var(--platform-text)] transition-colors cursor-default opacity-40">
-              Micro-apps
-            </span>
+            {NAV_ITEMS.map((item) => {
+              const isActive =
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium transition-colors duration-200"
+                  style={{
+                    color: isActive
+                      ? "var(--platform-text)"
+                      : "var(--platform-muted)",
+                    borderBottom: isActive
+                      ? "2px solid var(--platform-accent)"
+                      : "2px solid transparent",
+                    paddingBottom: "2px",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* CTA */}
-          <button
+          <Link
+            href="/"
             className="rounded-full px-5 py-2 text-sm font-medium text-white transition-all duration-200 hover:opacity-90"
             style={{ backgroundColor: "var(--platform-accent)" }}
           >
             Demander une démo
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

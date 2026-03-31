@@ -170,9 +170,72 @@ Je recommanderais l'Option B pour les nouveaux (ils apprennent plus vite en voya
 
 [...la conversation continue sur 15-25 minutes avec ce niveau de profondeur...]
 
+---
+
+## PARTIE 2 — HUB STUDIO (maquettes statiques)
+
+En plus du brainstorm, le prototype contient une section "Hub Studio" accessible via la navigation principale. C'est une MAQUETTE VISUELLE — rien ne fonctionne, mais le UI doit être impeccable.
+
+### NAVIGATION PRINCIPALE
+
+Le prototype a une top nav avec deux entrées :
+- **Brainstorm** — La session AI live (Claude API)
+- **Hub Studio** — Les maquettes statiques du produit
+
+Le client peut naviguer entre les deux librement.
+
+### 4 ÉCRANS MAQUETTES (statiques, zéro backend)
+
+**Écran 1 — Dashboard (page d'accueil)**
+- Header de bienvenue avec nom d'utilisateur et équipe
+- Cards d'accès rapide aux outils principaux (Template Editor, Brand Checker, AI Agent, Micro-apps)
+- Feed d'activité récente (données fictives — 5 derniers assets créés/édités)
+- 4 cards d'équipe/swimlane : Intact Brand (Mia), belairdirect (Fred), Sponsorship (Martine), Acquisition/Growth (Solène) — chaque card a l'avatar de l'agent et le nom du lead
+- Widgets stats : assets créés ce mois, score de conformité marque, templates actifs
+- Layout : cards blanches sur fond Soothing Sand, spacing généreux
+
+**Écran 2 — Template Editor**
+- Panel gauche : galerie de templates (thumbnails en grille, filtrable par marque/format/campagne)
+- Centre : preview live du template sélectionné — montre une vraie pub Intact ou belairdirect avec les bonnes couleurs/fonts
+- Panel droit : champs éditables visibles (H1, body, CTA, sélecteur d'image) — non fonctionnels
+- Barre supérieure : toggle Intact/belairdirect, sélecteur de format (social, banner, email), bouton AI assist
+- Bas : options d'export (PNG, PDF, multi-format) — visibles mais non fonctionnelles
+- La preview montre du VRAI contenu de marque — pas de Lorem ipsum
+
+**Écran 3 — Catalogue Micro-apps**
+- Grille de cards micro-apps, chaque card a : icône, nom, description courte, lien "Ouvrir →"
+- Apps à montrer :
+  - SVG Animator — "Animez vos SVGs avec des prompts AI"
+  - Chevalier Generator — "Générez des poses du Petit Chevalier pour belairdirect"
+  - A/B Factory — "Créez des variantes A/B à partir d'un seul template"
+  - Brand Checker — "Validez vos assets contre les guidelines de marque"
+  - Brief Creator — "Générez des briefs créatifs à partir d'une conversation"
+  - Image Gen — "Génération d'images AI, on-brand"
+- Certaines cards marquées "À venir" avec un badge subtil
+
+**Écran 4 — Team Page (exemple : Intact Brand)**
+- Page d'équipe de Mia (Intact Brand)
+- Sidebar agent : avatar de Mia, intro courte, conversations récentes
+- Bibliothèque de templates spécifiques à Intact (palette rouge/sand/noir)
+- Stats d'équipe et activité récente
+- Accès rapide aux outils et guidelines Intact
+- Tout est brandé Intact : red brackets, Soothing Sand, typographie Intact
+- Note : "Chaque équipe a sa propre page avec son propre agent AI et ses outils de marque"
+
+### RÈGLES POUR LES MAQUETTES
+
+- Contenu RÉALISTE — du vrai copy publicitaire, des noms plausibles, des stats crédibles
+- Appliquer les bons systèmes de marque (voir brand-reconnaissance-studio-ai.md)
+- ZÉRO "Lorem ipsum" — écrire du vrai copy Intact/belairdirect
+- Pas de skeleton screens — montrer l'état "idéal" complet
+- Chaque écran doit ressembler à un vrai screenshot de produit
+- La qualité UI doit être IMPECCABLE — c'est ce qui vend la vision
+
+---
+
 ### STACK
 
-Next.js 14+ / React 18+ / TypeScript strict / Tailwind CSS / Claude API (streaming)
+Next.js 14+ / React 18+ / TypeScript strict / Tailwind CSS / Claude API (streaming pour le brainstorm)
 Déploiement Vercel.
 
 ### IMPORTANT
@@ -180,8 +243,10 @@ Déploiement Vercel.
 - Lis brand-reconnaissance-studio-ai.md AVANT de coder quoi que ce soit lié aux marques
 - Les deux marques (Intact et belairdirect) ne se mélangent JAMAIS
 - Le prototype doit WOW le client pour qu'il approuve le projet complet
-- C'est un prototype de vision, pas une app fonctionnelle — le polish UI > les features complètes
-- Le résumé exportable est NON-NÉGOCIABLE
-- La conversation AI doit être RÉELLE (Claude API), pas simulée avec des réponses hardcodées
-- Le client doit TAPER des réponses, pas juste cliquer sur des boutons
+- C'est un prototype de vision — le polish UI > les features complètes
+- Le résumé exportable du brainstorm est NON-NÉGOCIABLE
+- La conversation AI du brainstorm doit être RÉELLE (Claude API), pas simulée
+- Le client doit TAPER des réponses dans le brainstorm, pas juste cliquer sur des boutons
+- Le Hub Studio est 100% statique — beau mais non fonctionnel
+- Les deux sections (Brainstorm + Hub Studio) sont accessibles via la nav principale
 ```

@@ -176,7 +176,66 @@ The platform UI draws from intact.ca's current design language. Key patterns to 
 
 ## Architecture
 
-### Two surfaces:
+### Phase 1 prototype: Two entry points via top navigation
+
+The prototype has a top navigation bar with two main sections the client can explore independently:
+
+1. **Brainstorm** — The AI-powered brainstorm session (real Claude API conversation). This is the main experience — see brainstorm methodology above.
+
+2. **Hub Studio** — A static mockup of the platform as it would look in daily use. This is NOT functional — it's a visual maquette showing the product vision. Beautiful UI, realistic content, but no working backend.
+
+The nav lets the client switch between the two at any time.
+
+### Hub Studio mockup screens (static UI — NO backend)
+
+The Hub Studio section contains 4 mockup screens. These are purely visual — they show what the platform WOULD look like, but nothing actually works. Buttons don't submit, forms don't save, the AI doesn't respond. It's a pixel-perfect vision of the product.
+
+**Screen 1 — Dashboard (homepage after login)**
+- Welcome header with user name and team
+- Quick-access cards to main tools (Template Editor, Brand Checker, AI Agent, Micro-apps)
+- Recent activity feed (fake data — last 5 assets created/edited by team members)
+- Team shortcuts: 4 swimlane cards (Intact Brand, belairdirect, Sponsorship, Acquisition/Growth) each with their agent avatar and team lead name
+- Stats widgets: assets created this month, brand compliance score, active templates
+- Clean layout: cards on Soothing Sand background, generous spacing
+
+**Screen 2 — Template Editor**
+- Left panel: template gallery (thumbnails grid, filterable by brand/format/campaign)
+- Center: live preview of selected template — shows a realistic Intact or belairdirect ad/banner
+- Right panel: editable fields (H1, body text, CTA label, image selector) — these are visible but non-functional
+- Top bar: brand selector toggle (Intact / belairdirect), format selector (social, banner, email), AI assist button
+- Bottom: export options (PNG, PDF, multi-format) — visible but non-functional
+- The preview should show REAL brand content with correct colors, fonts, and imagery for whichever brand is "selected"
+
+**Screen 3 — Micro-apps Catalog**
+- Grid of micro-app cards, each with: icon, name, short description, "Open →" link
+- Micro-apps to show:
+  - SVG Animator — "Animate your SVGs with AI prompts"
+  - Chevalier Generator — "Generate Little Knight poses for belairdirect" (with small knight illustration)
+  - A/B Factory — "Create A/B test variants from a single template"
+  - Brand Checker — "Validate any asset against brand guidelines"
+  - Brief Creator — "Generate creative briefs from a conversation"
+  - Image Gen — "AI-powered image generation, on-brand"
+- Some cards marked "Coming soon" with a subtle badge
+- Each card uses brand-appropriate styling (belairdirect cards might have a subtle blue accent, Intact cards a red one)
+
+**Screen 4 — Team Page example (Intact Brand)**
+- Shows what Mia's team page looks like
+- Agent sidebar: Mia's avatar, brief intro ("I'm Mia, your Intact brand expert"), recent conversations
+- Team-specific template library (Intact templates only — correct red/sand/black palette)
+- Team stats and recent activity
+- Quick-access to Intact-specific tools and guidelines
+- Everything is Intact-branded: red brackets, Soothing Sand backgrounds, Intact typography
+- A small note/badge: "Each team has its own page with its own AI agent and brand-specific tools"
+
+### Important for Hub Studio mockup screens:
+- Use REALISTIC content — real-looking ad copy, plausible team member names, believable stats
+- Apply correct brand systems from brand-reconnaissance-studio-ai.md
+- The UI quality must be impeccable — this is what sells the vision
+- No "Lorem ipsum" — write actual Intact/belairdirect copy for previews
+- No skeleton screens or loading states — show the "ideal" full state
+- Each screen should feel like a real product screenshot
+
+### Full platform architecture (for reference — not all built in Phase 1):
 
 1. **Hub Studio** — Dashboard for all IFC employees. Generic tools: image gen, SVG animator, brainstorm AI, brand checker, micro-app catalog.
 
@@ -186,7 +245,7 @@ The platform UI draws from intact.ca's current design language. Key patterns to 
    - Sponsorship (Martine)
    - Acquisition/Growth (Solène)
 
-### Key features to showcase in Phase 1:
+### Key features (shown in mockups):
 
 1. **Template Editor** — Live preview, editable content (H1, text, image, CTA), pre-approved visual options, AI-assisted mode, multi-format PNG export
 2. **AI Agent** — Chat interface embedded everywhere, deep brand voice knowledge for both Intact and belairdirect
