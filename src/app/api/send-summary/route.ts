@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     `;
 
     await resend.emails.send({
-      from: "Studio AI <onboarding@resend.dev>",
+      from: "Studio AI <notifications@alloleo.com>",
       to: notifyEmail,
       subject: `Studio AI — Résumé brainstorm ${date}`,
       html,
