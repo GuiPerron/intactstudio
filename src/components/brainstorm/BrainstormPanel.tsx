@@ -45,60 +45,80 @@ function extractDemoTags(text: string): { cleanText: string; demos: string[] } {
 }
 
 // ── Phase detection based on conversation ──
-function detectPhase(messageCount: number, content: string): StepId {
+function detectPhase(userMsgCount: number, content: string): StepId {
   const lowerContent = content.toLowerCase();
-  if (messageCount <= 2) return "intro";
-  if (messageCount <= 8) return "discovery";
-  if (lowerContent.includes("[demo:session-summary]") || lowerContent.includes("résumé")) return "summary";
-  if (lowerContent.includes("[demo:priority") || lowerContent.includes("priorit")) return "priorities";
-  if (messageCount > 16) return "priorities";
-  if (messageCount > 12) return "surprise";
-  return "features";
+  if (lowerContent.includes("[demo:session-summary]")) return "summary";
+  if (lowerContent.includes("[demo:priority")) return "priorities";
+  if (userMsgCount === 0) return "intro";
+  if (userMsgCount <= 2) return "discovery";
+  if (userMsgCount <= 5) return "features";
+  if (userMsgCount <= 7) return "surprise";
+  if (userMsgCount <= 9) return "priorities";
+  return "summary";
 }
 
 // ── Quick reply suggestions per phase ──
-function getQuickReplies(phase: StepId, _messageCount: number): string[] {
-  switch (phase) {
-    case "intro":
-      return [
-        "C'est la cohérence entre Intact et belairdirect",
-        "Les tâches répétitives et les adaptations FR/EN",
-        "Le onboarding des nouveaux employés est un cauchemar",
-      ];
-    case "discovery":
-      return [
-        "Oui, c'est exactement ça",
-        "Ça arrive tout le temps, surtout avec les nouvelles recrues",
-        "Notre plus gros problème c'est plutôt...",
-        "On perd beaucoup de temps là-dessus",
-      ];
-    case "features":
-      return [
-        "Oui, l'équipe utiliserait ça quotidiennement",
-        "Montre-moi un autre exemple",
-        "C'est intéressant mais pas prioritaire",
-        "On a besoin de ça, mais en plus simple",
-      ];
-    case "surprise":
-      return [
-        "Wow, je savais pas que c'était possible",
-        "Qu'est-ce que tu peux faire d'autre?",
-        "Passons aux priorités",
-      ];
-    case "priorities":
-      return [
-        "Le template editor, c'est la priorité #1",
-        "La génération de contenu en premier",
-        "Le brand checker en premier",
-      ];
-    case "summary":
-      return [
-        "Prépare le résumé",
-        "Parfait, on a tout couvert",
-      ];
-    default:
-      return [];
+function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
+  // First response — answer the opening question
+  if (userMsgCount === 0) {
+    return [
+      "La cohérence entre Intact et belairdirect",
+      "Les tâches répétitives et adaptations FR/EN",
+      "Le onboarding des nouveaux est un cauchemar",
+    ];
   }
+
+  // Discovery — follow-up responses
+  if (phase === "discovery") {
+    if (userMsgCount === 1) {
+      return [
+        "Surtout les erreurs de ton entre les deux marques",
+        "C'est quotidien, ça impacte toute l'équipe",
+        "Les deux, ton et visuel",
+      ];
+    }
+    return [
+      "Oui c'est exactement ça",
+      "On peut passer aux solutions?",
+      "J'aimerais voir ce que tu proposes",
+    ];
+  }
+
+  // Features — react to demos
+  if (phase === "features") {
+    return [
+      "Oui, l'équipe utiliserait ça au quotidien",
+      "C'est intéressant, montre-moi autre chose",
+      "Qu'est-ce que tu proposes pour belairdirect?",
+    ];
+  }
+
+  // Surprise
+  if (phase === "surprise") {
+    return [
+      "Impressionnant! Quoi d'autre?",
+      "On peut parler des priorités?",
+    ];
+  }
+
+  // Priorities
+  if (phase === "priorities") {
+    return [
+      "Le template editor en premier",
+      "La génération de contenu AI est la priorité",
+      "Le brand checker, c'est le plus urgent",
+    ];
+  }
+
+  // Summary
+  if (phase === "summary") {
+    return [
+      "Prépare le résumé final",
+      "On a tout couvert, merci!",
+    ];
+  }
+
+  return [];
 }
 
 // ── Priority ranker items ──
@@ -181,11 +201,8 @@ export function BrainstormPanel() {
       }
 
       // Update phase
-      const allContent = messageText.toLowerCase();
-      const msgCount = blocks.filter(
-        (b) => b.type === "user" || b.type === "agent"
-      ).length;
-      const newPhase = detectPhase(msgCount, allContent);
+      const userMsgCount = blocks.filter((b) => b.type === "user").length;
+      const newPhase = detectPhase(userMsgCount, messageText);
       setCurrentPhase(newPhase);
     },
     [blocks, sessionData]
