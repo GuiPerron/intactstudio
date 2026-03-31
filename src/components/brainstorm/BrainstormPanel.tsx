@@ -30,6 +30,23 @@ const DEMO_TAGS: Record<string, Block["type"]> = {
   "[DEMO:session-summary]": "summary",
 };
 
+function extractReplies(text: string): { cleanText: string; replies: string[] } {
+  const repliesMatch = text.match(/\[REPLIES:\s*"([^"]+)"(?:\s*\|\s*"([^"]+)")*\s*\]/);
+  if (!repliesMatch) return { cleanText: text, replies: [] };
+
+  // Extract all quoted strings from the tag
+  const fullTag = repliesMatch[0];
+  const replies: string[] = [];
+  const quoteRegex = /"([^"]+)"/g;
+  let match;
+  while ((match = quoteRegex.exec(fullTag)) !== null) {
+    replies.push(match[1]);
+  }
+
+  const cleanText = text.replace(fullTag, "").trim();
+  return { cleanText, replies };
+}
+
 function extractDemoTags(text: string): { cleanText: string; demos: string[] } {
   let cleanText = text;
   const demos: string[] = [];
@@ -150,6 +167,9 @@ export function BrainstormPanel() {
   const [isStreaming, setIsStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Dynamic quick replies from AI
+  const [dynamicReplies, setDynamicReplies] = useState<string[]>([]);
+
   // Session data accumulator
   const [sessionData, setSessionData] = useState<SessionData>({
     painPoints: [],
@@ -179,7 +199,11 @@ export function BrainstormPanel() {
   // ── Process completed AI message: extract demos, update phase ──
   const processCompletedMessage = useCallback(
     (messageText: string, messageId: string) => {
-      const { cleanText, demos } = extractDemoTags(messageText);
+      // Extract quick replies first
+      const { cleanText: textWithoutReplies, replies } = extractReplies(messageText);
+      setDynamicReplies(replies);
+
+      const { cleanText, demos } = extractDemoTags(textWithoutReplies);
 
       // Update the message text (strip demo tags)
       if (cleanText !== messageText) {
@@ -224,6 +248,7 @@ export function BrainstormPanel() {
   const sendMessage = useCallback(
     async (content: string, isOpening = false) => {
       // Add user message (unless opening)
+      setDynamicReplies([]);
       if (!isOpening) {
         setBlocks((prev) => [
           ...prev,
@@ -366,7 +391,12 @@ export function BrainstormPanel() {
   }
 
   const userMsgCount = blocks.filter((b) => b.type === "user").length;
-  const quickReplies = isStreaming ? [] : getQuickReplies(currentPhase, userMsgCount);
+  // Use AI-generated replies if available, fallback to static ones
+  const quickReplies = isStreaming
+    ? []
+    : dynamicReplies.length > 0
+      ? dynamicReplies
+      : getQuickReplies(currentPhase, userMsgCount);
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
