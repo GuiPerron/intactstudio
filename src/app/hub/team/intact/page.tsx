@@ -107,7 +107,7 @@ export default function IntactTeamPage() {
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-semibold tracking-tight">Intact Brand</h1>
                   <span className="text-xs font-medium text-[#DF0030] bg-[#FEF2F4] rounded-full px-2.5 py-0.5">
-                    Mia Chen, Lead
+                    Mia Sarah Bergman, Lead
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-[var(--platform-muted)]">

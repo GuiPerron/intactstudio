@@ -18,10 +18,10 @@ const RECENT_ACTIVITY = [
 ];
 
 const TEAMS = [
-  { name: "Intact Brand", agent: "Mia", lead: "Mia Chen", color: "#DF0030", members: 3, templates: 24, href: "/hub/team/intact" },
-  { name: "belairdirect", agent: "Fred", lead: "Fred Lavoie", color: "#0F68D8", members: 2, templates: 18, href: "#" },
-  { name: "Sponsorship", agent: "Martine", lead: "Martine Dubois", color: "#2D716F", members: 1, templates: 8, href: "#" },
-  { name: "Acquisition", agent: "Solène", lead: "Solène Roy", color: "#7E6484", members: 2, templates: 12, href: "#" },
+  { name: "Intact Brand", agent: "Mia", lead: "Mia Sarah Bergman", color: "#DF0030", members: 3, templates: 24, href: "/hub/team/intact" },
+  { name: "belairdirect", agent: "Fred", lead: "Frederick Lanteigne", color: "#0F68D8", members: 2, templates: 18, href: "#" },
+  { name: "Sponsorship", agent: "Martine", lead: "Martine Bouthillier", color: "#2D716F", members: 1, templates: 8, href: "#" },
+  { name: "Acquisition", agent: "Solène", lead: "Solène Deswarte", color: "#7E6484", members: 2, templates: 12, href: "#" },
 ];
 
 export default function Dashboard() {

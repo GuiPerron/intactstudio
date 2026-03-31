@@ -17,10 +17,10 @@ const RECENT_ACTIVITY = [
 ];
 
 const TEAMS = [
-  { name: "Intact Brand", agent: "Mia", lead: "Mia Chen", color: "#DF0030", bg: "#F7F2EA", members: 3, templates: 24 },
-  { name: "belairdirect", agent: "Fred", lead: "Fred Lavoie", color: "#0F68D8", bg: "#F5F8FA", members: 2, templates: 18 },
-  { name: "Sponsorship", agent: "Martine", lead: "Martine Dubois", color: "#2D716F", bg: "#F0FAF8", members: 1, templates: 8 },
-  { name: "Acquisition", agent: "Solène", lead: "Solène Roy", color: "#7E6484", bg: "#F8F4FA", members: 2, templates: 12 },
+  { name: "Intact Brand", agent: "Mia", lead: "Mia Sarah Bergman", color: "#DF0030", bg: "#F7F2EA", members: 3, templates: 24 },
+  { name: "belairdirect", agent: "Fred", lead: "Frederick Lanteigne", color: "#0F68D8", bg: "#F5F8FA", members: 2, templates: 18 },
+  { name: "Sponsorship", agent: "Martine", lead: "Martine Bouthillier", color: "#2D716F", bg: "#F0FAF8", members: 1, templates: 8 },
+  { name: "Acquisition", agent: "Solène", lead: "Solène Deswarte", color: "#7E6484", bg: "#F8F4FA", members: 2, templates: 12 },
 ];
 
 export default function HubDashboard() {
