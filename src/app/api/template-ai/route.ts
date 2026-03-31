@@ -38,7 +38,15 @@ Tu crées et modifies des templates en générant du JSON structuré. Quand l'ut
 - CTA: bgColor "#0F68D8" (BLEU, JAMAIS rouge), textColor "#FFFFFF", borderRadius 28
 - Logo: text "belairdirect.", color "#FFFFFF", fontFamily "'Montserrat', sans-serif"
 - "belairdirect" TOUJOURS en minuscule
-- Placeholders image: "🛡️ Petit Chevalier", "🛡️ Chevalier avec auto", "🛡️ Chevalier relax"
+- Images du Petit Chevalier disponibles (utilise le champ "src") :
+  - "/assets/knight/Heart_01.png" — Chevalier avec coeur
+  - "/assets/knight/Hold_Car_02_Car_And_House.png" — Auto + Maison
+  - "/assets/knight/Hold_Phone_01.png" — Chevalier téléphone
+  - "/assets/knight/Proud_01.png" — Chevalier fier
+  - "/assets/knight/Protect_Hand_01.png" — Main protectrice
+  - "/assets/knight/Ready_Go_01.png" — Chevalier prêt
+  - "/assets/knight/Sit_01.png" — Chevalier assis
+  - "/assets/knight/Hold_House_01.png" — Chevalier maison
 - Ton: direct, playful, accessible
 
 ### Intact Insurance

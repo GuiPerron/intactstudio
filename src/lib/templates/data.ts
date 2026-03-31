@@ -12,7 +12,7 @@ export const TEMPLATES: Template[] = [
     layers: [
       { type: "text", id: "h1", content: "Groupe tes assurances\net économise.", x: 60, y: 60, fontSize: 72, fontWeight: "800", color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif", maxWidth: 600, lineHeight: 1.1 },
       { type: "text", id: "body", content: "Plus d'argent pour ta prochaine escapade.", x: 60, y: 340, fontSize: 36, fontWeight: "400", color: "#FFFFFF", fontFamily: "'Roboto', sans-serif", maxWidth: 550 },
-      { type: "image", id: "mascot", placeholder: "🛡️ Petit Chevalier", x: 540, y: 420, width: 460, height: 520, bgColor: "rgba(255,255,255,0.1)" },
+      { type: "image", id: "mascot", placeholder: "🛡️ Petit Chevalier", src: "/assets/knight/Heart_01.png", x: 540, y: 420, width: 460, height: 520 },
       { type: "cta", id: "cta", label: "Obtenir ma soumission", x: 60, y: 880, bgColor: "#0F68D8", textColor: "#FFFFFF", borderRadius: 28, fontSize: 28, fontFamily: "'Montserrat', sans-serif" },
       { type: "logo", id: "logo", text: "belairdirect.", x: 60, y: 1000, fontSize: 32, color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif" },
     ],
@@ -45,7 +45,7 @@ export const TEMPLATES: Template[] = [
     layers: [
       { type: "logo", id: "logo", text: "belairdirect.", x: 60, y: 80, fontSize: 28, color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif" },
       { type: "text", id: "h1", content: "Ton assurance\nauto, simplifiée.", x: 60, y: 300, fontSize: 80, fontWeight: "800", color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif", maxWidth: 900, lineHeight: 1.1 },
-      { type: "image", id: "mascot", placeholder: "🛡️ Chevalier avec auto", x: 200, y: 750, width: 680, height: 600, bgColor: "rgba(255,255,255,0.1)" },
+      { type: "image", id: "mascot", placeholder: "🛡️ Chevalier avec auto", src: "/assets/knight/Hold_Car_02_Car_And_House.png", x: 200, y: 750, width: 680, height: 600 },
       { type: "text", id: "body", content: "Soumission en 5 min.\nZéro paperasse. Zéro détour.", x: 60, y: 1420, fontSize: 40, fontWeight: "400", color: "#FFFFFF", fontFamily: "'Roboto', sans-serif", maxWidth: 800, lineHeight: 1.4 },
       { type: "cta", id: "cta", label: "Obtenir ma soumission", x: 60, y: 1620, bgColor: "#0F68D8", textColor: "#FFFFFF", borderRadius: 32, fontSize: 32, fontFamily: "'Montserrat', sans-serif" },
       { type: "text", id: "legal", content: "assurance. simplifiée.", x: 60, y: 1820, fontSize: 22, fontWeight: "400", color: "rgba(255,255,255,0.6)", fontFamily: "'Roboto', sans-serif" },
@@ -93,7 +93,7 @@ export const TEMPLATES: Template[] = [
       { type: "logo", id: "logo", text: "belairdirect.", x: 60, y: 60, fontSize: 28, color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif" },
       { type: "text", id: "h1", content: "Ton chez-toi.\nBien protégé.", x: 60, y: 300, fontSize: 80, fontWeight: "800", color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif", maxWidth: 700, lineHeight: 1.1 },
       { type: "text", id: "body", content: "Assurance habitation à partir de 25$/mois.", x: 60, y: 620, fontSize: 32, fontWeight: "400", color: "rgba(255,255,255,0.7)", fontFamily: "'Roboto', sans-serif" },
-      { type: "image", id: "mascot", placeholder: "🛡️ Chevalier relax", x: 600, y: 650, width: 400, height: 350, bgColor: "rgba(255,255,255,0.05)" },
+      { type: "image", id: "mascot", placeholder: "🛡️ Chevalier relax", src: "/assets/knight/Sit_01.png", x: 600, y: 650, width: 400, height: 350 },
       { type: "cta", id: "cta", label: "Voir les offres", x: 60, y: 900, bgColor: "#0F68D8", textColor: "#FFFFFF", borderRadius: 28, fontSize: 28, fontFamily: "'Montserrat', sans-serif" },
     ],
   },

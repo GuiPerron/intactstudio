@@ -11,6 +11,7 @@ import {
   FormatKey,
   BRAND_TOKENS,
   FORMAT_DIMENSIONS,
+  KNIGHT_ASSETS,
 } from "@/lib/templates/types";
 
 export default function TemplateEditorPage() {
@@ -277,16 +278,32 @@ export default function TemplateEditorPage() {
                   return (
                     <div
                       key={layer.id}
-                      className="absolute rounded-lg flex items-center justify-center"
+                      className="absolute flex items-center justify-center overflow-hidden"
                       style={{
                         left: layer.x * scale,
                         top: layer.y * scale,
                         width: layer.width * scale,
                         height: layer.height * scale,
-                        backgroundColor: layer.bgColor || "rgba(255,255,255,0.1)",
+                        backgroundColor: !layer.src ? (layer.bgColor || "rgba(255,255,255,0.1)") : "transparent",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingLayerId(layer.id);
                       }}
                     >
-                      <span style={{ fontSize: 14 * scale, opacity: 0.6 }}>{layer.placeholder}</span>
+                      {layer.src ? (
+                        <img
+                          src={layer.src}
+                          alt={layer.placeholder}
+                          className="w-full h-full object-contain"
+                          style={{
+                            outline: editingLayerId === layer.id ? "2px solid var(--platform-accent)" : "none",
+                            outlineOffset: "2px",
+                          }}
+                        />
+                      ) : (
+                        <span style={{ fontSize: 14 * scale, opacity: 0.6 }}>{layer.placeholder}</span>
+                      )}
                     </div>
                   );
                 }
@@ -416,6 +433,46 @@ export default function TemplateEditorPage() {
                 ))}
               </div>
             </div>
+
+            {/* Knight assets (belairdirect only) */}
+            {activeBrand === "belairdirect" && (
+              <div>
+                <p className="text-[10px] font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">
+                  Petit Chevalier
+                </p>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {KNIGHT_ASSETS.map((asset) => {
+                    const imageLayer = template.layers.find((l) => l.type === "image" && l.id === "mascot");
+                    const isActive = imageLayer?.type === "image" && imageLayer.src === asset.src;
+                    return (
+                      <button
+                        key={asset.id}
+                        onClick={() => {
+                          // Update the mascot image in the current template
+                          if (aiTemplate) {
+                            setAiTemplate({
+                              ...aiTemplate,
+                              layers: aiTemplate.layers.map((l) =>
+                                l.id === "mascot" && l.type === "image"
+                                  ? { ...l, src: asset.src, placeholder: asset.label }
+                                  : l
+                              ),
+                            });
+                          }
+                        }}
+                        className="rounded-lg border-2 overflow-hidden aspect-square transition-all hover:shadow-sm"
+                        style={{
+                          borderColor: isActive ? "var(--platform-accent)" : "var(--platform-border)",
+                        }}
+                        title={asset.label}
+                      >
+                        <img src={asset.src} alt={asset.label} className="w-full h-full object-contain p-0.5" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* CTA styles */}
             <div>

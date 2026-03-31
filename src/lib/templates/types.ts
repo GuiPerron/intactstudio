@@ -19,12 +19,24 @@ export interface ImageLayer {
   type: "image";
   id: string;
   placeholder: string; // emoji or label for prototype
+  src?: string; // actual image path
   x: number;
   y: number;
   width: number;
   height: number;
   bgColor?: string;
 }
+
+export const KNIGHT_ASSETS = [
+  { id: "heart", src: "/assets/knight/Heart_01.png", label: "Chevalier coeur" },
+  { id: "car-house", src: "/assets/knight/Hold_Car_02_Car_And_House.png", label: "Auto + Maison" },
+  { id: "phone", src: "/assets/knight/Hold_Phone_01.png", label: "Chevalier téléphone" },
+  { id: "proud", src: "/assets/knight/Proud_01.png", label: "Chevalier fier" },
+  { id: "protect", src: "/assets/knight/Protect_Hand_01.png", label: "Main protectrice" },
+  { id: "ready", src: "/assets/knight/Ready_Go_01.png", label: "Chevalier prêt!" },
+  { id: "sit", src: "/assets/knight/Sit_01.png", label: "Chevalier assis" },
+  { id: "house", src: "/assets/knight/Hold_House_01.png", label: "Chevalier maison" },
+];
 
 export interface CtaLayer {
   type: "cta";
