@@ -84,12 +84,12 @@ export default function TemplateEditorPage() {
     link.click();
   }, [template.name, activeBrand]);
 
-  // Scale the preview to fit
-  const maxPreviewW = 560;
-  const maxPreviewH = 520;
+  // Scale the preview to fit the available space
+  const maxPreviewW = 600;
+  const maxPreviewH = 650;
   const scaleX = maxPreviewW / format.width;
   const scaleY = maxPreviewH / format.height;
-  const scale = Math.min(scaleX, scaleY, 0.55);
+  const scale = Math.min(scaleX, scaleY);
 
   const filteredTemplates = TEMPLATES;
 
@@ -208,7 +208,7 @@ export default function TemplateEditorPage() {
           </div>
 
           {/* Canvas area */}
-          <div className="flex-1 flex items-center justify-center p-6 overflow-auto" onClick={() => setEditingLayerId(null)}>
+          <div className="flex-1 flex items-start justify-center p-6 pt-8 overflow-auto" onClick={() => setEditingLayerId(null)}>
             <div
               ref={canvasRef}
               className="relative shadow-xl rounded-lg overflow-hidden transition-all duration-500"
