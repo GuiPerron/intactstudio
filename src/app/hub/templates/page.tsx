@@ -433,11 +433,21 @@ export default function TemplateEditorPage() {
                       <button
                         key={asset.id}
                         onClick={() => {
-                          // Update the mascot image in the current template
                           if (aiTemplate) {
                             setAiTemplate({
                               ...aiTemplate,
                               layers: aiTemplate.layers.map((l) =>
+                                l.id === "mascot" && l.type === "image"
+                                  ? { ...l, src: asset.src, placeholder: asset.label }
+                                  : l
+                              ),
+                            });
+                          } else {
+                            // For predefined templates, wrap in aiTemplate to make it editable
+                            const current = TEMPLATES.find((t) => t.id === selectedId)!;
+                            setAiTemplate({
+                              ...current,
+                              layers: current.layers.map((l) =>
                                 l.id === "mascot" && l.type === "image"
                                   ? { ...l, src: asset.src, placeholder: asset.label }
                                   : l
