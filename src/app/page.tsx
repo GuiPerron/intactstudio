@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { BrandId } from "@/lib/brand/config";
-import { Header } from "@/components/layout/Header";
-import { ChatPanel } from "@/components/chat/ChatPanel";
+import { NavBar } from "@/components/layout/NavBar";
+import { BrainstormPanel } from "@/components/brainstorm/BrainstormPanel";
 
 export default function Home() {
-  const [activeBrand, setActiveBrand] = useState<BrandId>("intact");
-
   return (
-    <div className="flex h-screen flex-col bg-white">
-      <Header activeBrand={activeBrand} onBrandChange={setActiveBrand} />
-      <ChatPanel brand={activeBrand} />
+    <div className="flex h-screen flex-col" style={{ backgroundColor: "var(--platform-sand)" }}>
+      <NavBar />
+      <BrainstormPanel />
     </div>
   );
 }
