@@ -6,49 +6,90 @@ AI-native creative platform for IFC's (Intact Financial Corporation) Creative & 
 
 **Phase 1 goal:** Vision validation prototype — a brainstorm/onboarding tool for the client to validate the concept before real development investment. NOT a functional app. It demonstrates the platform vision through an interactive, polished UI.
 
-**How Phase 1 starts:** The prototype opens with an interactive brainstorm session. This is NOT just a pitch — it's a real working session that collects feedback AND sells the vision simultaneously. The AI agent guides the client (IFC leadership / Creative & Brand Studio stakeholders) through the Studio AI concept while capturing their priorities, ideas, and reactions for the future build.
+**How Phase 1 starts:** The prototype opens with an interactive brainstorm session — a REAL conversation between the AI agent and the client, powered by Claude API. This is NOT a survey, NOT a form with pre-written choices, NOT a guided tour with click-to-continue buttons. It's a live AI chat that feels like sitting down with a smart creative partner who knows the brand inside-out.
 
 **Brainstorm = Feedback Collection + Vision Demo.** Two goals in one experience:
 1. **Sell the vision** — Show what's possible through live demos and proposals
 2. **Collect structured feedback** — Capture what the client actually wants, what they prioritize, what surprises them, what they'd change
 
+---
+
+### ⚠️ CRITICAL: How the brainstorm ACTUALLY works (read carefully)
+
+**The brainstorm is a REAL AI CONVERSATION using Claude API.** The client TYPES responses in a chat interface. The AI agent responds dynamically based on what the client says. Nothing is pre-scripted. The conversation should last 15-25 minutes, not 2 minutes.
+
+**The WRONG way (what to avoid):**
+- ❌ Pre-written multiple choice cards that the client clicks without typing
+- ❌ A scripted sequence where every response is predetermined
+- ❌ Showing all pain points at once as a checkbox grid
+- ❌ Showing all features at once with emoji reaction buttons
+- ❌ A form disguised as a conversation
+- ❌ The whole thing finishing in 5 clicks
+- ❌ The client never typing a single word
+
+**The RIGHT way:**
+- ✅ The AI asks ONE question, the client TYPES a response, the AI reacts intelligently
+- ✅ The AI proposes an idea in 2-3 sentences, then asks "What do you think? Would this be useful for your team?"
+- ✅ The client can say "Actually, our biggest problem is X" and the AI pivots
+- ✅ The AI shows a LIVE DEMO embedded in the chat (e.g., brand voice switch) and then discusses it
+- ✅ The conversation branches based on what the client cares about
+- ✅ The AI remembers earlier answers and references them ("You mentioned brand consistency is a pain point — this feature directly addresses that")
+- ✅ At the end, the AI compiles everything discussed into a structured summary
+
+**The conversation mechanics:**
+- The chat interface has a text input where the client types freely
+- The AI can also offer quick-reply suggestions (2-3 short options) as clickable chips BELOW the text input — but the client can always ignore them and type something else
+- The AI can embed rich UI components INSIDE chat messages: live demos, before/after comparisons, interactive previews
+- The AI maintains a hidden data structure that captures every preference, reaction, and decision as the conversation progresses
+- This data structure feeds the final summary/export
+
+---
+
+### Brainstorm methodology
+
 The brainstorm works like a real collaborative working session (the way a designer and a client would brainstorm a project together). The AI agent LEADS with proposals, but it also LISTENS and RECORDS. Every client reaction is data for the project.
 
-**Brainstorm methodology (inspired by structured brainstorming):**
-- Ask ONE question at a time — don't overwhelm with a wall of questions
-- Prefer multiple-choice options when possible (easier to answer, easier to capture)
-- For each topic: propose 2-3 concrete approaches with trade-offs, let the client pick/refine
+- Ask ONE question at a time — don't overwhelm
+- For each topic: propose 2-3 concrete approaches with trade-offs, explain the recommended one, let the client react
 - Present ideas in small digestible chunks (not a monologue), validate each before moving on
 - The agent recommends an approach and explains WHY — it has an opinion, not just options
+- Quick-reply chips can help guide the conversation, but the text input is always available
 
-**The flow:**
-1. **Introduction** — Agent introduces itself AND the session format ("We're going to brainstorm together what Studio AI should be. I'll propose ideas, show you demos, and capture your feedback. At the end, you'll get a clean summary of everything we decided.")
-2. **Pain points discovery** — "What takes too long? What's repetitive? Where do brand errors happen?" (one question at a time)
-3. **Feature proposals** — Based on answers, agent PROPOSES concrete solutions with 2-3 options. Shows live UI demos for each. Client reacts, agent captures the preference.
-4. **Surprise & delight** — Agent proactively shows capabilities the client hasn't imagined ("Did you know I can switch between Intact and belairdirect voice instantly? Watch this...")
-5. **Priority ranking** — Agent asks client to rank which features matter most (template editor? brand checker? micro-apps? AI content gen?)
-6. **Summary & export** — Agent produces a clean, structured summary document of the entire brainstorm session:
-   - Identified pain points
-   - Proposed solutions and client reactions
+### The flow (6 phases, ~15-25 min total)
+
+1. **Introduction** (~1 min) — Agent introduces itself AND the session format. Sets expectations: "We're going to brainstorm together what Studio AI should be. I'll propose ideas, show you demos, and capture your feedback. At the end, you'll get a clean summary of everything we decided. Just type your thoughts — there's no wrong answer."
+
+2. **Pain points discovery** (~3-5 min) — Agent asks about current workflow challenges ONE AT A TIME. Example: "To start — what's the single most time-consuming repetitive task your team deals with?" Then follows up based on the answer. Goes deeper before moving on: "How often does that happen? Every week? Every day?"
+
+3. **Feature proposals with live demos** (~5-8 min) — Based on pain points discussed, agent PROPOSES specific solutions. For each: explains it in 2-3 sentences, shows an inline demo/preview component, asks for the client's reaction. Example: "Based on what you said about brand consistency issues, I think a Brand Checker could help. Watch this —" [inline demo of brand checker analyzing a fake asset] "— What do you think? Would your team use something like this?"
+
+4. **Surprise & delight** (~2-3 min) — Agent proactively shows capabilities the client hasn't imagined. These are "wow moments" embedded in the conversation. Example: [shows brand voice switch demo inline] "Did you notice the tone, colors, and CTA style all changed? This is what happens when brand knowledge is built into the platform. Your team would never accidentally write belairdirect copy in Intact's voice."
+
+5. **Priority ranking** (~2-3 min) — Agent recaps what they discussed and asks the client to rank features. Can show a drag-and-drop list OR simply ask conversationally: "Of everything we talked about, what would make the biggest impact if we built it first?"
+
+6. **Summary & export** — Agent produces a clean, structured summary document:
+   - Identified pain points (with context from the conversation)
+   - Proposed solutions and client reactions (with quotes)
    - Feature priorities (ranked)
-   - Key decisions made
+   - Key decisions and insights from the discussion
    - Next steps
-   - This summary can be downloaded/exported as a deliverable to share with stakeholders
+   - This summary is downloadable/exportable as a deliverable
 
-**What the brainstorm captures (structured data):**
-- Pain points and their severity
-- Feature preferences (yes/no/maybe + priority level)
+### What the brainstorm captures (structured data, built during conversation)
+- Pain points and their severity (from the client's own words)
+- Feature preferences with context (not just yes/no — WHY they liked or disliked something)
 - Brand-specific needs per swimlane
-- Client reactions to each demo (excited, neutral, skeptical)
-- Open ideas and suggestions from the client
+- Open ideas and suggestions from the client (things WE didn't propose)
 - Ranked priorities for Phase 2 build
+- Surprising insights (things the client said that we didn't expect)
 
-**Key principles:**
+### Key principles
 - The client discovers what's possible by experiencing it, not by reading about it
 - Every interaction generates useful project data — nothing is wasted
 - The agent has opinions and recommends, but the client decides
 - "Everything is possible" energy — surprise and delight
 - The deliverable at the end makes this session valuable even if the project doesn't get approved immediately
+- **The conversation should feel natural and human — not like clicking through a wizard**
 
 ## Tech Stack
 
