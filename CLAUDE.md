@@ -230,13 +230,44 @@ Everything else (Template Editor, Micro-apps Catalog, Team Pages) is a pixel-per
 - Stats widgets: assets created this month, brand compliance score, active templates
 - Clean layout: cards on Soothing Sand background, generous spacing
 
-**Screen 2 — Template Editor**
-- Left panel: template gallery (thumbnails grid, filterable by brand/format/campaign)
-- Center: live preview of selected template — shows a realistic Intact or belairdirect ad/banner
-- Right panel: editable fields (H1, body text, CTA label, image selector) — these are visible but non-functional
-- Top bar: brand selector toggle (Intact / belairdirect), format selector (social, banner, email), AI assist button
-- Bottom: export options (PNG, PDF, multi-format) — visible but non-functional
-- The preview should show REAL brand content with correct colors, fonts, and imagery for whichever brand is "selected"
+**Screen 2 — Template Editor (FUNCTIONAL — canvas-based)**
+The Template Editor is a lightweight canvas editor built directly in the web app. It does NOT connect to Figma (Figma's API is read-only, no write access). Instead, it has its own predefined template library and renders everything client-side.
+
+**How it works:**
+- Templates are pre-built as structured JSON (text layers, image slots, colors, positions, sizes)
+- The editor renders them on an HTML Canvas or as styled HTML/CSS components
+- Users click on any element to edit it directly (inline editing)
+- Changes render in real-time on the preview
+
+**Left panel — Template library:**
+- Grid of thumbnail previews, filterable by brand (Intact / belairdirect) and format (social, banner, story, email)
+- 4-6 pre-built templates with realistic brand content:
+  - belairdirect social post (Little Knight + CTA)
+  - Intact Insurance banner (red brackets + warm photography)
+  - belairdirect story format (vertical, playful tone)
+  - Intact brand awareness post (Soothing Sand + serif typography)
+- Click a template → loads it in the center preview
+
+**Center — Live preview canvas:**
+- Renders the selected template at the correct dimensions
+- Click-to-edit: click on H1, body text, or CTA → inline text editing directly on the canvas
+- Image slots: click on an image area → opens image picker from the asset library
+- Real-time: every edit updates the preview instantly
+
+**Right panel — Properties & asset library:**
+- Text properties: font size, weight, color (constrained to brand palette)
+- Image library: pre-loaded brand assets (Little Knight poses, Intact photography, logos, icons)
+- CTA options: pre-approved button styles per brand (belairdirect = blue #0F68D8, Intact = red #D11338)
+- Layer list: shows all editable elements in the template
+
+**Top bar:**
+- Brand toggle: Intact ↔ belairdirect — switches the ENTIRE template to the other brand's tokens (colors, fonts, CTA style, tone). This is the "wow moment" — one click, the whole ad transforms.
+- Format selector: Social (1080×1080) / Banner (728×90) / Story (1080×1920) / Email header (600×200) — the template reflows to the selected format
+- AI assist button: opens the AI sidebar with context about the current template ("Suggest 3 alternative headlines for this belairdirect conversion ad")
+
+**Bottom:**
+- Export buttons: PNG download (functional — export the canvas as image), PDF (optional)
+- A/B button: duplicates the current template into a variant → user edits the copy → sees both side by side
 
 **Screen 3 — Micro-apps Catalog**
 - Grid of micro-app cards, each with: icon, name, short description, "Open →" link

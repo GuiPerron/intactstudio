@@ -15,7 +15,8 @@ Last updated: 2026-03-30
 ### Architecture
 - Hub-first experience: client arrives on Dashboard, navigates to tools from there
 - Two FUNCTIONAL features: Brief Creator (adaptive form) + AI Agent sidebar (Claude API chat)
-- Everything else = pixel-perfect mockups (Template Editor, Micro-apps Catalog, Team Page)
+- Template Editor = FUNCTIONAL canvas-based editor with predefined template library (no Figma — API is read-only)
+- Everything else = pixel-perfect mockups (Micro-apps Catalog, Team Page)
 - NO separate "brainstorm" entry — the AI sidebar IS the brainstorm tool
 - Phase 1 is a VISION VALIDATION prototype, NOT a functional app
 - Goal: WOW the client into greenlighting the full build
