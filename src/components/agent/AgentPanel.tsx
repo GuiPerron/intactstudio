@@ -12,14 +12,27 @@ interface Message {
 
 interface AgentPanelProps {
   onClose: () => void;
+  mode?: "default" | "template";
+  currentTemplateJson?: string;
 }
 
-export function AgentPanel({ onClose }: AgentPanelProps) {
+function extractTemplateJson(text: string): { cleanText: string; templateJson: string | null } {
+  const match = text.match(/\[TEMPLATE_JSON\]([\s\S]*?)\[\/TEMPLATE_JSON\]/);
+  if (!match) return { cleanText: text, templateJson: null };
+
+  const jsonStr = match[1].trim();
+  const cleanText = text.replace(/\[TEMPLATE_JSON\][\s\S]*?\[\/TEMPLATE_JSON\]/, "").trim();
+  return { cleanText, templateJson: jsonStr };
+}
+
+export function AgentPanel({ onClose, mode = "default", currentTemplateJson }: AgentPanelProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const apiEndpoint = mode === "template" ? "/api/template-ai" : "/api/brainstorm";
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -27,18 +40,19 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
     }, 50);
   }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [isStreaming]);
+  useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
+  useEffect(() => { if (!isStreaming) inputRef.current?.focus(); }, [isStreaming]);
 
   const handleSend = async (content?: string) => {
     const text = (content || input).trim();
     if (!text || isStreaming) return;
     setInput("");
+
+    // In template mode, append current template context
+    let fullText = text;
+    if (mode === "template" && currentTemplateJson) {
+      fullText = `${text}\n\n[TEMPLATE ACTUEL]\n${currentTemplateJson}`;
+    }
 
     const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: text };
     const assistantMsg: Message = { id: crypto.randomUUID(), role: "assistant", content: "" };
@@ -47,9 +61,12 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
     setIsStreaming(true);
 
     try {
-      const history = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
+      const history = [...messages, { ...userMsg, content: fullText }].map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
-      const response = await fetch("/api/brainstorm", {
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: history }),
@@ -62,7 +79,7 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
       if (!reader) throw new Error("No reader");
 
       let buffer = "";
-      let fullText = "";
+      let fullResponse = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -78,20 +95,36 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
           if (data === "[DONE]") break;
           try {
             const parsed = JSON.parse(data);
-            fullText += parsed.text;
+            fullResponse += parsed.text;
             setMessages((prev) =>
-              prev.map((m) => (m.id === assistantMsg.id ? { ...m, content: fullText } : m))
+              prev.map((m) => (m.id === assistantMsg.id ? { ...m, content: fullResponse } : m))
             );
             scrollToBottom();
           } catch { /* skip */ }
         }
       }
 
-      // Clean up any [REPLIES:...] tags
-      const cleanText = fullText.replace(/\[REPLIES:.*?\]/g, "").trim();
+      // Process completed response
+      const { cleanText, templateJson } = extractTemplateJson(fullResponse);
+
+      // Clean up display: remove [REPLIES:...] too
+      const displayText = cleanText.replace(/\[REPLIES:.*?\]/g, "").trim();
+
       setMessages((prev) =>
-        prev.map((m) => (m.id === assistantMsg.id ? { ...m, content: cleanText } : m))
+        prev.map((m) => (m.id === assistantMsg.id ? { ...m, content: displayText } : m))
       );
+
+      // If template JSON found, emit event
+      if (templateJson) {
+        try {
+          const parsed = JSON.parse(templateJson);
+          window.dispatchEvent(
+            new CustomEvent("template-update", { detail: parsed })
+          );
+        } catch (e) {
+          console.error("Failed to parse template JSON:", e);
+        }
+      }
     } catch {
       setMessages((prev) =>
         prev.map((m) =>
@@ -103,26 +136,34 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
     }
   };
 
+  const suggestions = mode === "template"
+    ? [
+        "Crée un post social belairdirect conversion",
+        "Switch ce template en version Intact",
+        "Propose 3 headlines plus punchy",
+      ]
+    : [
+        "Brainstorme un concept de campagne",
+        "Écris un headline Intact habitation",
+        "Guidelines du Petit Chevalier?",
+      ];
+
   return (
     <div className="fixed bottom-6 right-6 z-50 w-[420px] h-[600px] flex flex-col rounded-2xl bg-white border border-[var(--platform-border)] shadow-2xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--platform-border)]" style={{ backgroundColor: "var(--platform-sand)" }}>
         <div className="flex items-center gap-2.5">
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-            style={{ backgroundColor: "var(--platform-accent)" }}
-          >
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: "var(--platform-accent)" }}>
             SA
           </div>
           <div>
             <p className="text-sm font-semibold">Studio AI</p>
-            <p className="text-[10px] text-[var(--platform-muted)]">Partenaire créatif</p>
+            <p className="text-[10px] text-[var(--platform-muted)]">
+              {mode === "template" ? "Mode Template Editor" : "Partenaire créatif"}
+            </p>
           </div>
         </div>
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-white/60 transition-colors"
-        >
+        <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/60 transition-colors">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M4 4L12 12M12 4L4 12" stroke="var(--platform-muted)" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
@@ -132,20 +173,20 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
-          <div className="text-center py-8">
+          <div className="text-center py-6">
             <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-lg font-bold" style={{ backgroundColor: "var(--platform-accent)" }}>
               SA
             </div>
-            <p className="text-sm font-semibold">Comment puis-je vous aider?</p>
+            <p className="text-sm font-semibold">
+              {mode === "template" ? "Template AI Assistant" : "Comment puis-je vous aider?"}
+            </p>
             <p className="text-xs text-[var(--platform-muted)] mt-1 max-w-[280px] mx-auto">
-              Je connais les marques Intact et belairdirect en profondeur. Brainstormez un concept, demandez de l&apos;aide sur un brief, ou posez-moi vos questions.
+              {mode === "template"
+                ? "Décrivez le template que vous voulez créer, ou demandez-moi de modifier le template actuel."
+                : "Brainstormez un concept, demandez de l'aide, ou posez vos questions."}
             </p>
             <div className="mt-4 flex flex-col gap-2">
-              {[
-                "Aide-moi à brainstormer un concept de campagne",
-                "Écris un headline Intact pour l'habitation",
-                "Quelles sont les guidelines du Petit Chevalier?",
-              ].map((s) => (
+              {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => handleSend(s)}
@@ -191,13 +232,8 @@ export function AgentPanel({ onClose }: AgentPanelProps) {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="Tapez votre message..."
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+            placeholder={mode === "template" ? "Décris le template à créer ou modifier..." : "Tapez votre message..."}
             disabled={isStreaming}
             rows={1}
             className="flex-1 resize-none bg-transparent text-sm leading-relaxed placeholder:text-[var(--platform-muted)] focus:outline-none disabled:opacity-50"

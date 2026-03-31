@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { AgentPanel } from "./AgentPanel";
 
-export function AgentToggle() {
+interface AgentToggleProps {
+  mode?: "default" | "template";
+  currentTemplateJson?: string;
+}
+
+export function AgentToggle({ mode = "default", currentTemplateJson }: AgentToggleProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      {/* Floating button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
@@ -21,12 +25,19 @@ export function AgentToggle() {
             <circle cx="9" cy="8" r="0.75" fill="currentColor"/>
             <circle cx="11.5" cy="8" r="0.75" fill="currentColor"/>
           </svg>
-          <span className="text-sm font-medium">AI Agent</span>
+          <span className="text-sm font-medium">
+            {mode === "template" ? "AI → Canvas" : "AI Agent"}
+          </span>
         </button>
       )}
 
-      {/* Panel */}
-      {open && <AgentPanel onClose={() => setOpen(false)} />}
+      {open && (
+        <AgentPanel
+          onClose={() => setOpen(false)}
+          mode={mode}
+          currentTemplateJson={currentTemplateJson}
+        />
+      )}
     </>
   );
 }

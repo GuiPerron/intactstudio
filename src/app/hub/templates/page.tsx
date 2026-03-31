@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { NavBar } from "@/components/layout/NavBar";
 import { AgentToggle } from "@/components/agent/AgentToggle";
 import { TEMPLATES } from "@/lib/templates/data";
@@ -20,11 +20,33 @@ export default function TemplateEditorPage() {
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
   const [filterBrand, setFilterBrand] = useState<"all" | BrandKey>("all");
+  const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const template = TEMPLATES.find((t) => t.id === selectedId)!;
+  // Listen for AI-generated template updates
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as Template;
+      if (detail && detail.layers) {
+        setAiTemplate(detail);
+        setActiveBrand(detail.brand || "belairdirect");
+        setActiveFormat(detail.format || "social");
+        setEditedLayers({});
+        setEditingLayerId(null);
+      }
+    };
+    window.addEventListener("template-update", handler);
+    return () => window.removeEventListener("template-update", handler);
+  }, []);
+
+  const template = aiTemplate || TEMPLATES.find((t) => t.id === selectedId)!;
   const tokens = BRAND_TOKENS[activeBrand];
   const format = FORMAT_DIMENSIONS[activeFormat];
+
+  const currentTemplateJson = useMemo(
+    () => JSON.stringify(template, null, 2),
+    [template]
+  );
 
   const getLayerContent = (layer: Layer): string => {
     if (layer.type === "cta") return editedLayers[selectedId]?.[layer.id] ?? layer.label;
@@ -45,6 +67,7 @@ export default function TemplateEditorPage() {
     setActiveBrand(t.brand);
     setActiveFormat(t.format);
     setEditingLayerId(null);
+    setAiTemplate(null);
   };
 
   const handleBrandSwitch = (brand: BrandKey) => {
@@ -441,7 +464,10 @@ export default function TemplateEditorPage() {
         </div>
       </div>
 
-      <AgentToggle />
+      <AgentToggle
+        mode="template"
+        currentTemplateJson={currentTemplateJson}
+      />
     </div>
   );
 }
