@@ -59,7 +59,8 @@ export function BrainstormInput({
               <button
                 key={i}
                 onClick={() => handleQuickReply(reply)}
-                className="rounded-full border border-[var(--platform-border)] bg-[var(--platform-sand)] px-3.5 py-1.5 text-xs text-[var(--platform-muted)] transition-all duration-200 hover:border-[var(--platform-accent)] hover:text-[var(--platform-accent)]"
+                className="rounded-full px-4 py-2 text-xs font-medium text-white transition-all duration-200 hover:opacity-85 hover:shadow-sm"
+                style={{ backgroundColor: "var(--platform-accent)" }}
               >
                 {reply}
               </button>

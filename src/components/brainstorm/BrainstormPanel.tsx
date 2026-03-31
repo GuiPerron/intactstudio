@@ -63,8 +63,11 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
   if (userMsgCount === 0) {
     return [
       "La cohérence entre Intact et belairdirect",
-      "Les déclinaisons multi-format et FR/EN prennent un temps fou",
+      "Les déclinaisons multi-format et FR/EN",
       "Le volume de production vs la taille de l'équipe",
+      "Pas d'outil centralisé — tout est éparpillé",
+      "Les guidelines dans des PDFs que personne ne consulte",
+      "Les allers-retours de validation qui bloquent tout",
     ];
   }
 
@@ -73,14 +76,18 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
     if (userMsgCount === 1) {
       return [
         "Surtout les erreurs de ton entre les deux marques",
-        "Les guidelines sont dans des PDFs que personne ne consulte",
         "Les deux — ton et visuels",
+        "Les guidelines sont dans des PDFs de 50+ pages",
+        "Ça arrive quotidiennement, ça impacte toute l'équipe",
+        "Chaque swimlane a ses propres besoins mais les mêmes outils",
       ];
     }
     return [
       "Oui c'est exactement ça",
-      "On peut passer aux solutions?",
+      "J'aimerais voir ce que vous proposez comme solutions",
       "Tout est éparpillé entre Figma, Teams et les emails",
+      "On perd un temps fou sur les adaptations",
+      "On peut passer aux solutions concrètes?",
     ];
   }
 
@@ -88,8 +95,10 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
   if (phase === "features") {
     return [
       "Oui, l'équipe utiliserait ça au quotidien",
-      "C'est intéressant, montre-moi autre chose",
-      "Qu'est-ce que tu proposes pour belairdirect?",
+      "C'est intéressant, montrez-moi autre chose",
+      "Comment ça gère le bilinguisme FR/EN?",
+      "Qu'est-ce que vous proposez pour belairdirect?",
+      "C'est pertinent mais pas notre priorité #1",
     ];
   }
 
@@ -97,6 +106,7 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
   if (phase === "surprise") {
     return [
       "Impressionnant! Quoi d'autre?",
+      "Comment ça s'intègre avec nos outils actuels?",
       "On peut parler des priorités?",
     ];
   }
@@ -107,6 +117,7 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
       "Le template editor en premier",
       "La génération de contenu AI est la priorité",
       "Le brand checker, c'est le plus urgent",
+      "Montrez-moi le classement interactif",
     ];
   }
 
@@ -115,6 +126,7 @@ function getQuickReplies(phase: StepId, userMsgCount: number): string[] {
     return [
       "Prépare le résumé final",
       "On a tout couvert, merci!",
+      "J'ai une dernière question avant le résumé",
     ];
   }
 
