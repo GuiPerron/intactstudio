@@ -19,6 +19,8 @@ export default function TemplateEditorPage() {
   const [activeBrand, setActiveBrand] = useState<BrandKey>(TEMPLATES[0].brand);
   const [activeFormat, setActiveFormat] = useState<FormatKey>(TEMPLATES[0].format);
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
+  const [customWidth, setCustomWidth] = useState<number | null>(null);
+  const [customHeight, setCustomHeight] = useState<number | null>(null);
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -84,11 +86,14 @@ export default function TemplateEditorPage() {
     link.click();
   }, [template.name, activeBrand]);
 
+  const canvasW = customWidth || format.width;
+  const canvasH = customHeight || format.height;
+
   // Scale the preview to fit the available space
   const maxPreviewW = 600;
   const maxPreviewH = 650;
-  const scaleX = maxPreviewW / format.width;
-  const scaleY = maxPreviewH / format.height;
+  const scaleX = maxPreviewW / canvasW;
+  const scaleY = maxPreviewH / canvasH;
   const scale = Math.min(scaleX, scaleY);
 
   const filteredTemplates = TEMPLATES;
@@ -193,13 +198,34 @@ export default function TemplateEditorPage() {
               {/* Format selector */}
               <select
                 value={activeFormat}
-                onChange={(e) => setActiveFormat(e.target.value as FormatKey)}
+                onChange={(e) => {
+                  setActiveFormat(e.target.value as FormatKey);
+                  setCustomWidth(null);
+                  setCustomHeight(null);
+                }}
                 className="text-xs border border-[var(--platform-border)] rounded-lg px-2.5 py-1.5 bg-white"
               >
                 {Object.entries(FORMAT_DIMENSIONS).map(([key, f]) => (
                   <option key={key} value={key}>{f.label}</option>
                 ))}
               </select>
+
+              {/* Custom size */}
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  value={customWidth || format.width}
+                  onChange={(e) => setCustomWidth(parseInt(e.target.value) || format.width)}
+                  className="w-16 text-xs border border-[var(--platform-border)] rounded-lg px-2 py-1.5 text-center bg-white"
+                />
+                <span className="text-[10px] text-[var(--platform-muted)]">×</span>
+                <input
+                  type="number"
+                  value={customHeight || format.height}
+                  onChange={(e) => setCustomHeight(parseInt(e.target.value) || format.height)}
+                  className="w-16 text-xs border border-[var(--platform-border)] rounded-lg px-2 py-1.5 text-center bg-white"
+                />
+              </div>
             </div>
 
             <button className="flex items-center gap-1.5 rounded-full border border-[var(--platform-border)] px-3 py-1.5 text-xs font-medium hover:border-[var(--platform-muted)]">
@@ -213,8 +239,8 @@ export default function TemplateEditorPage() {
               ref={canvasRef}
               className="relative shadow-xl rounded-lg overflow-hidden transition-all duration-500"
               style={{
-                width: format.width * scale,
-                height: format.height * scale,
+                width: canvasW * scale,
+                height: canvasH * scale,
                 backgroundColor: activeBrand === template.brand ? template.backgroundColor : tokens.backgroundColor,
               }}
             >
@@ -486,6 +512,54 @@ export default function TemplateEditorPage() {
                 </div>
               </div>
             </div>
+
+            {/* Position & size (selected layer) */}
+            {editingLayerId && (() => {
+              const layer = template.layers.find((l) => l.id === editingLayerId);
+              if (!layer) return null;
+              const updateLayer = (props: Record<string, number>) => {
+                const t = aiTemplate || { ...TEMPLATES.find((t) => t.id === selectedId)! };
+                setAiTemplate({
+                  ...t,
+                  layers: t.layers.map((l) =>
+                    l.id === editingLayerId ? { ...l, ...props } : l
+                  ),
+                });
+              };
+              return (
+                <div>
+                  <p className="text-[10px] font-semibold text-[var(--platform-muted)] uppercase tracking-wider mb-2">
+                    Position — {editingLayerId}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[9px] text-[var(--platform-muted)]">X</label>
+                      <input type="number" value={layer.x} onChange={(e) => updateLayer({ x: +e.target.value })} className="w-full rounded border border-[var(--platform-border)] px-2 py-1 text-xs" />
+                    </div>
+                    <div>
+                      <label className="text-[9px] text-[var(--platform-muted)]">Y</label>
+                      <input type="number" value={layer.y} onChange={(e) => updateLayer({ y: +e.target.value })} className="w-full rounded border border-[var(--platform-border)] px-2 py-1 text-xs" />
+                    </div>
+                    {"width" in layer && (
+                      <div>
+                        <label className="text-[9px] text-[var(--platform-muted)]">W</label>
+                        <input type="number" value={(layer as { width: number }).width} onChange={(e) => updateLayer({ width: +e.target.value })} className="w-full rounded border border-[var(--platform-border)] px-2 py-1 text-xs" />
+                      </div>
+                    )}
+                    {"height" in layer && (
+                      <div>
+                        <label className="text-[9px] text-[var(--platform-muted)]">H</label>
+                        <input type="number" value={(layer as { height: number }).height} onChange={(e) => updateLayer({ height: +e.target.value })} className="w-full rounded border border-[var(--platform-border)] px-2 py-1 text-xs" />
+                      </div>
+                    )}
+                    <div>
+                      <label className="text-[9px] text-[var(--platform-muted)]">Font</label>
+                      <input type="number" value={layer.type === "text" ? layer.fontSize : layer.type === "cta" ? layer.fontSize : 0} onChange={(e) => updateLayer({ fontSize: +e.target.value })} className="w-full rounded border border-[var(--platform-border)] px-2 py-1 text-xs" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Layers list */}
             <div>
