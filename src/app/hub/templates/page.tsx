@@ -320,9 +320,14 @@ export default function TemplateEditorPage() {
           </div>
 
           {/* Canvas area */}
-          <div className="flex-1 flex items-start justify-center p-6 pt-8 overflow-auto" onClick={() => setEditingLayerId(null)}>
+          <div className="flex-1 flex items-start justify-center p-6 pt-8 overflow-auto" onClick={(e) => {
+            if (e.target === e.currentTarget || (e.target as HTMLElement).getAttribute("data-canvas-bg")) {
+              setEditingLayerId(null);
+            }
+          }}>
             <div
               ref={canvasRef}
+              data-canvas-bg="true"
               className="relative shadow-xl rounded-lg overflow-hidden transition-all duration-500"
               style={{
                 width: canvasW * scale,
@@ -401,7 +406,15 @@ export default function TemplateEditorPage() {
                         height: layer.height * scale,
                         cursor: dragging?.layerId === layer.id ? "grabbing" : "grab",
                       }}
-                      onMouseDown={(e) => startDrag(e, layer)}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        setEditingLayerId(layer.id);
+                        startDrag(e, layer);
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingLayerId(layer.id);
+                      }}
                     >
                       {layer.src ? (
                         <img
