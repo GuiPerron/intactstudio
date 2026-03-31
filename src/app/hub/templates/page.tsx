@@ -20,7 +20,6 @@ export default function TemplateEditorPage() {
   const [activeFormat, setActiveFormat] = useState<FormatKey>(TEMPLATES[0].format);
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
-  const filterBrand: "all" | BrandKey = "all";
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -92,9 +91,7 @@ export default function TemplateEditorPage() {
   const scaleY = maxPreviewH / format.height;
   const scale = Math.min(scaleX, scaleY, 0.55);
 
-  const filteredTemplates = filterBrand === "all"
-    ? TEMPLATES
-    : TEMPLATES.filter((t) => t.brand === filterBrand);
+  const filteredTemplates = TEMPLATES;
 
   // Get brand-aware layer style
   const getLayerStyle = (layer: Layer) => {
@@ -124,22 +121,7 @@ export default function TemplateEditorPage() {
         <div className="w-[240px] border-r border-[var(--platform-border)] bg-white overflow-y-auto shrink-0">
           <div className="p-3 border-b border-[var(--platform-border)]">
             <h2 className="text-sm font-semibold mb-2">Templates</h2>
-            <div className="flex gap-1.5">
-              {(["all", "intact", "belairdirect"] as const).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setFilterBrand(f)}
-                  className="rounded-full px-2.5 py-1 text-[10px] font-medium border transition-colors"
-                  style={{
-                    borderColor: filterBrand === f ? "var(--platform-accent)" : "var(--platform-border)",
-                    backgroundColor: filterBrand === f ? "#FEF2F4" : "white",
-                    color: filterBrand === f ? "var(--platform-accent)" : "var(--platform-muted)",
-                  }}
-                >
-                  {f === "all" ? "Tous" : f === "intact" ? "Intact" : "belairdirect"}
-                </button>
-              ))}
-            </div>
+            <p className="text-[10px] text-[var(--platform-muted)]">belairdirect — 6 templates</p>
           </div>
 
           <div className="p-2 space-y-1.5">
