@@ -21,6 +21,7 @@ export default function TemplateEditorPage() {
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
   const [customWidth, setCustomWidth] = useState<number | null>(null);
   const [customHeight, setCustomHeight] = useState<number | null>(null);
+  const [lockAspect, setLockAspect] = useState(true);
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -215,14 +216,45 @@ export default function TemplateEditorPage() {
                 <input
                   type="number"
                   value={customWidth || format.width}
-                  onChange={(e) => setCustomWidth(parseInt(e.target.value) || format.width)}
+                  onChange={(e) => {
+                    const w = parseInt(e.target.value) || format.width;
+                    setCustomWidth(w);
+                    if (lockAspect) {
+                      const ratio = (customHeight || format.height) / (customWidth || format.width);
+                      setCustomHeight(Math.round(w * ratio));
+                    }
+                  }}
                   className="w-16 text-xs border border-[var(--platform-border)] rounded-lg px-2 py-1.5 text-center bg-white"
                 />
-                <span className="text-[10px] text-[var(--platform-muted)]">×</span>
+                <button
+                  onClick={() => setLockAspect(!lockAspect)}
+                  className="p-1 rounded transition-colors"
+                  style={{ color: lockAspect ? "var(--platform-accent)" : "var(--platform-muted)" }}
+                  title={lockAspect ? "Aspect ratio verrouillé" : "Aspect ratio libre"}
+                >
+                  {lockAspect ? (
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <rect x="3" y="6" width="8" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                      <path d="M5 6V4.5C5 3.12 6.12 2 7.5 2V2C8.88 2 10 3.12 10 4.5V6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <rect x="3" y="6" width="8" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                      <path d="M5 6V4.5C5 3.12 6.12 2 7.5 2V2C8.88 2 10 3.12 10 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  )}
+                </button>
                 <input
                   type="number"
                   value={customHeight || format.height}
-                  onChange={(e) => setCustomHeight(parseInt(e.target.value) || format.height)}
+                  onChange={(e) => {
+                    const h = parseInt(e.target.value) || format.height;
+                    setCustomHeight(h);
+                    if (lockAspect) {
+                      const ratio = (customWidth || format.width) / (customHeight || format.height);
+                      setCustomWidth(Math.round(h * ratio));
+                    }
+                  }}
                   className="w-16 text-xs border border-[var(--platform-border)] rounded-lg px-2 py-1.5 text-center bg-white"
                 />
               </div>

@@ -11,7 +11,8 @@ export const TEMPLATES: Template[] = [
     backgroundColor: "#C8102E",
     layers: [
       { type: "text", id: "h1", content: "Groupe tes\nassurances\net économise.", x: 65, y: 50, fontSize: 88, fontWeight: "800", color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif", maxWidth: 750, lineHeight: 1.02 },
-      { type: "cta", id: "cta", label: "En savoir plus", x: 65, y: 370, bgColor: "#0F68D8", textColor: "#FFFFFF", borderRadius: 24, fontSize: 22, fontFamily: "'Montserrat', sans-serif", borderColor: "#FFFFFF", borderWidth: 2 },
+      { type: "text", id: "body", content: "Plus d'argent pour ta prochaine escapade.", x: 65, y: 340, fontSize: 28, fontWeight: "400", color: "rgba(255,255,255,0.8)", fontFamily: "'Roboto', sans-serif" },
+      { type: "cta", id: "cta", label: "En savoir plus", x: 65, y: 410, bgColor: "#0F68D8", textColor: "#FFFFFF", borderRadius: 24, fontSize: 22, fontFamily: "'Montserrat', sans-serif", borderColor: "#FFFFFF", borderWidth: 2 },
       { type: "image", id: "mascot", placeholder: "Petit Chevalier", src: "/assets/knight/Heart_01.png", x: 380, y: 340, width: 750, height: 750 },
       { type: "logo", id: "logo", text: "belairdirect.", x: 65, y: 950, fontSize: 36, color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif" },
       { type: "text", id: "sub-logo", content: "assurances auto et habitation", x: 65, y: 995, fontSize: 18, fontWeight: "400", color: "rgba(255,255,255,0.6)", fontFamily: "'Roboto', sans-serif" },
