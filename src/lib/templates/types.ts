@@ -50,6 +50,8 @@ export interface CtaLayer {
   borderRadius: number;
   fontSize: number;
   fontFamily: string;
+  borderColor?: string;
+  borderWidth?: number;
 }
 
 export interface LogoLayer {

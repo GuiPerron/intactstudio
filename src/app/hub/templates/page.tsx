@@ -20,7 +20,7 @@ export default function TemplateEditorPage() {
   const [activeFormat, setActiveFormat] = useState<FormatKey>(TEMPLATES[0].format);
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
-  const [filterBrand, setFilterBrand] = useState<"all" | BrandKey>("all");
+  const [filterBrand] = useState<"all" | BrandKey>("all");
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -325,7 +325,10 @@ export default function TemplateEditorPage() {
                         fontSize: layer.fontSize * scale,
                         fontWeight: "600",
                         fontFamily: layer.fontFamily,
-                        outline: isEditing ? "2px solid white" : "none",
+                        border: layer.borderColor
+                          ? `${(layer.borderWidth || 2) * scale}px solid ${layer.borderColor}`
+                          : "none",
+                        outline: isEditing ? "2px solid yellow" : "none",
                         outlineOffset: "2px",
                       }}
                       onClick={(e) => {
