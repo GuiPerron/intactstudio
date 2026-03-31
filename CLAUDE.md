@@ -6,19 +6,49 @@ AI-native creative platform for IFC's (Intact Financial Corporation) Creative & 
 
 **Phase 1 goal:** Vision validation prototype — a brainstorm/onboarding tool for the client to validate the concept before real development investment. NOT a functional app. It demonstrates the platform vision through an interactive, polished UI.
 
-**How Phase 1 starts:** The prototype opens with an interactive brainstorm experience. This is the client-facing onboarding flow — a guided conversation that walks the client (IFC leadership / Creative & Brand Studio stakeholders) through the Studio AI vision. The brainstorm showcases what the platform could do by SHOWING it: the AI agent introduces itself, demonstrates brand awareness (switching between Intact and belairdirect voices), walks through the template editor concept, previews micro-apps, and lets the client interact with the vision. Think of it as a pitch deck that's alive — not slides, but a working UI that tells the story of the platform while being the platform.
+**How Phase 1 starts:** The prototype opens with an interactive brainstorm session. This is NOT just a pitch — it's a real working session that collects feedback AND sells the vision simultaneously. The AI agent guides the client (IFC leadership / Creative & Brand Studio stakeholders) through the Studio AI concept while capturing their priorities, ideas, and reactions for the future build.
 
-**Brainstorm philosophy:** The AI agent LEADS the conversation — it doesn't just ask questions and wait. The client (Creative & Brand Studio team) doesn't know everything Claude/AI can do, so the agent must PROPOSE ideas, SHOW possibilities, and INSPIRE. It's a creative partner, not a form to fill out.
+**Brainstorm = Feedback Collection + Vision Demo.** Two goals in one experience:
+1. **Sell the vision** — Show what's possible through live demos and proposals
+2. **Collect structured feedback** — Capture what the client actually wants, what they prioritize, what surprises them, what they'd change
 
-The flow should feel like:
-1. Agent introduces itself and the platform vision
-2. Agent asks about the team's current pain points ("What takes too long? What's repetitive?")
-3. Based on answers, agent PROPOSES concrete solutions — and DEMOS them live in the UI
-4. Agent proactively suggests capabilities the client hasn't thought of ("Did you know I can switch between Intact and belairdirect voice instantly? Watch this...")
-5. Agent shows template editor concept, micro-apps catalog, brand-aware content generation
-6. At each step: the agent leads with ideas, the client reacts and refines
+The brainstorm works like a real collaborative working session (the way a designer and a client would brainstorm a project together). The AI agent LEADS with proposals, but it also LISTENS and RECORDS. Every client reaction is data for the project.
 
-Key principle: **The client discovers what's possible by experiencing it, not by reading about it.** The agent should surprise and delight — "everything is possible" is the energy.
+**Brainstorm methodology (inspired by structured brainstorming):**
+- Ask ONE question at a time — don't overwhelm with a wall of questions
+- Prefer multiple-choice options when possible (easier to answer, easier to capture)
+- For each topic: propose 2-3 concrete approaches with trade-offs, let the client pick/refine
+- Present ideas in small digestible chunks (not a monologue), validate each before moving on
+- The agent recommends an approach and explains WHY — it has an opinion, not just options
+
+**The flow:**
+1. **Introduction** — Agent introduces itself AND the session format ("We're going to brainstorm together what Studio AI should be. I'll propose ideas, show you demos, and capture your feedback. At the end, you'll get a clean summary of everything we decided.")
+2. **Pain points discovery** — "What takes too long? What's repetitive? Where do brand errors happen?" (one question at a time)
+3. **Feature proposals** — Based on answers, agent PROPOSES concrete solutions with 2-3 options. Shows live UI demos for each. Client reacts, agent captures the preference.
+4. **Surprise & delight** — Agent proactively shows capabilities the client hasn't imagined ("Did you know I can switch between Intact and belairdirect voice instantly? Watch this...")
+5. **Priority ranking** — Agent asks client to rank which features matter most (template editor? brand checker? micro-apps? AI content gen?)
+6. **Summary & export** — Agent produces a clean, structured summary document of the entire brainstorm session:
+   - Identified pain points
+   - Proposed solutions and client reactions
+   - Feature priorities (ranked)
+   - Key decisions made
+   - Next steps
+   - This summary can be downloaded/exported as a deliverable to share with stakeholders
+
+**What the brainstorm captures (structured data):**
+- Pain points and their severity
+- Feature preferences (yes/no/maybe + priority level)
+- Brand-specific needs per swimlane
+- Client reactions to each demo (excited, neutral, skeptical)
+- Open ideas and suggestions from the client
+- Ranked priorities for Phase 2 build
+
+**Key principles:**
+- The client discovers what's possible by experiencing it, not by reading about it
+- Every interaction generates useful project data — nothing is wasted
+- The agent has opinions and recommends, but the client decides
+- "Everything is possible" energy — surprise and delight
+- The deliverable at the end makes this session valuable even if the project doesn't get approved immediately
 
 ## Tech Stack
 
