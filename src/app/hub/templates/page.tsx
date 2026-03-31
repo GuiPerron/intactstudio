@@ -22,6 +22,8 @@ export default function TemplateEditorPage() {
   const [customWidth, setCustomWidth] = useState<number | null>(null);
   const [customHeight, setCustomHeight] = useState<number | null>(null);
   const [lockAspect, setLockAspect] = useState(true);
+  const [dragging, setDragging] = useState<{ layerId: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
+  const [resizing, setResizing] = useState<{ layerId: string; startX: number; startY: number; origW: number; origH: number; origLX: number; origLY: number } | null>(null);
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -50,6 +52,60 @@ export default function TemplateEditorPage() {
     () => JSON.stringify(template, null, 2),
     [template]
   );
+
+  const updateLayerProps = useCallback((layerId: string, props: Record<string, number>) => {
+    const base = aiTemplate || { ...TEMPLATES.find((t) => t.id === selectedId)! };
+    setAiTemplate({
+      ...base,
+      layers: base.layers.map((l) => (l.id === layerId ? { ...l, ...props } : l)),
+    });
+  }, [aiTemplate, selectedId]);
+
+  // Mouse move handler for drag & resize
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (dragging) {
+        const dx = (e.clientX - dragging.startX) / scale;
+        const dy = (e.clientY - dragging.startY) / scale;
+        updateLayerProps(dragging.layerId, {
+          x: Math.round(dragging.origX + dx),
+          y: Math.round(dragging.origY + dy),
+        });
+      }
+      if (resizing) {
+        const dx = (e.clientX - resizing.startX) / scale;
+        const dy = (e.clientY - resizing.startY) / scale;
+        const newW = Math.max(40, Math.round(resizing.origW + dx));
+        const newH = Math.max(40, Math.round(resizing.origH + dy));
+        updateLayerProps(resizing.layerId, { width: newW, height: newH });
+      }
+    };
+    const handleMouseUp = () => {
+      setDragging(null);
+      setResizing(null);
+    };
+    if (dragging || resizing) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+      };
+    }
+  }, [dragging, resizing, scale, updateLayerProps]);
+
+  const startDrag = (e: React.MouseEvent, layer: Layer) => {
+    e.stopPropagation();
+    setEditingLayerId(layer.id);
+    setDragging({ layerId: layer.id, startX: e.clientX, startY: e.clientY, origX: layer.x, origY: layer.y });
+  };
+
+  const startResize = (e: React.MouseEvent, layer: Layer) => {
+    e.stopPropagation();
+    const w = "width" in layer ? (layer as { width: number }).width : 200;
+    const h = "height" in layer ? (layer as { height: number }).height : 200;
+    setResizing({ layerId: layer.id, startX: e.clientX, startY: e.clientY, origW: w, origH: h, origLX: layer.x, origLY: layer.y });
+  };
 
   const getLayerContent = (layer: Layer): string => {
     if (layer.type === "cta") return editedLayers[selectedId]?.[layer.id] ?? layer.label;
@@ -281,68 +337,108 @@ export default function TemplateEditorPage() {
 
                 if (layer.type === "text") {
                   const isEditing = editingLayerId === layer.id;
+                  const isSelected = editingLayerId === layer.id;
                   const content = getLayerContent(layer);
                   return (
                     <div
                       key={layer.id}
-                      className="absolute cursor-text transition-colors duration-300"
+                      className="absolute group"
                       style={{
                         left: layer.x * scale,
                         top: layer.y * scale,
-                        maxWidth: layer.maxWidth ? layer.maxWidth * scale : undefined,
-                        fontSize: layer.fontSize * scale,
-                        fontWeight: layer.fontWeight,
-                        fontFamily: (layerStyle as { fontFamily?: string }).fontFamily || layer.fontFamily,
-                        color: (layerStyle as { color?: string }).color || layer.color,
-                        lineHeight: layer.lineHeight || 1.3,
-                        whiteSpace: "pre-wrap",
-                        outline: isEditing ? `2px solid var(--platform-accent)` : "2px solid transparent",
-                        outlineOffset: "2px",
-                        borderRadius: "2px",
+                        cursor: dragging?.layerId === layer.id ? "grabbing" : "grab",
                       }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingLayerId(layer.id);
+                      onMouseDown={(e) => {
+                        if (!(e.target as HTMLElement).getAttribute("contenteditable")) {
+                          startDrag(e, layer);
+                        }
                       }}
-                      contentEditable={isEditing}
-                      suppressContentEditableWarning
-                      onBlur={(e) => {
-                        setLayerContent(layer.id, e.currentTarget.textContent || "");
-                      }}
-                      dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, "<br>") }}
-                    />
+                    >
+                      <div
+                        className="transition-colors duration-300"
+                        style={{
+                          maxWidth: layer.maxWidth ? layer.maxWidth * scale : undefined,
+                          fontSize: layer.fontSize * scale,
+                          fontWeight: layer.fontWeight,
+                          fontFamily: (layerStyle as { fontFamily?: string }).fontFamily || layer.fontFamily,
+                          color: (layerStyle as { color?: string }).color || layer.color,
+                          lineHeight: layer.lineHeight || 1.3,
+                          whiteSpace: "pre-wrap",
+                          outline: isSelected ? "2px solid rgba(255,255,255,0.6)" : "2px solid transparent",
+                          outlineOffset: "2px",
+                          borderRadius: "2px",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingLayerId(layer.id);
+                        }}
+                        onDoubleClick={(e) => {
+                          e.stopPropagation();
+                          setEditingLayerId(layer.id);
+                          (e.currentTarget as HTMLElement).contentEditable = "true";
+                          (e.currentTarget as HTMLElement).focus();
+                        }}
+                        contentEditable={isEditing}
+                        suppressContentEditableWarning
+                        onBlur={(e) => {
+                          setLayerContent(layer.id, e.currentTarget.textContent || "");
+                          (e.currentTarget as HTMLElement).contentEditable = "false";
+                        }}
+                        dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, "<br>") }}
+                      />
+                    </div>
                   );
                 }
 
                 if (layer.type === "image") {
+                  const isSelected = editingLayerId === layer.id;
                   return (
                     <div
                       key={layer.id}
-                      className="absolute flex items-center justify-center overflow-hidden"
+                      className="absolute"
                       style={{
                         left: layer.x * scale,
                         top: layer.y * scale,
                         width: layer.width * scale,
                         height: layer.height * scale,
-                        backgroundColor: !layer.src ? (layer.bgColor || "rgba(255,255,255,0.1)") : "transparent",
+                        cursor: dragging?.layerId === layer.id ? "grabbing" : "grab",
                       }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingLayerId(layer.id);
-                      }}
+                      onMouseDown={(e) => startDrag(e, layer)}
                     >
                       {layer.src ? (
                         <img
                           src={layer.src}
                           alt={layer.placeholder}
-                          className="w-full h-full object-contain"
-                          style={{
-                            outline: editingLayerId === layer.id ? "2px solid var(--platform-accent)" : "none",
-                            outlineOffset: "2px",
-                          }}
+                          className="w-full h-full object-contain pointer-events-none select-none"
+                          draggable={false}
                         />
                       ) : (
-                        <span style={{ fontSize: 14 * scale, opacity: 0.6 }}>{layer.placeholder}</span>
+                        <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: layer.bgColor || "rgba(255,255,255,0.1)" }}>
+                          <span style={{ fontSize: 14 * scale, opacity: 0.6 }}>{layer.placeholder}</span>
+                        </div>
+                      )}
+                      {/* Selection outline + resize handle */}
+                      {isSelected && (
+                        <>
+                          <div className="absolute inset-0 border-2 border-white/60 rounded pointer-events-none" />
+                          <div
+                            className="absolute -right-1.5 -bottom-1.5 w-3.5 h-3.5 bg-white border-2 rounded-sm cursor-se-resize"
+                            style={{ borderColor: "var(--platform-accent)" }}
+                            onMouseDown={(e) => { e.stopPropagation(); startResize(e, layer); }}
+                          />
+                          <div
+                            className="absolute -left-1.5 -top-1.5 w-3.5 h-3.5 bg-white border-2 rounded-sm cursor-nw-resize opacity-50"
+                            style={{ borderColor: "var(--platform-accent)" }}
+                          />
+                          <div
+                            className="absolute -right-1.5 -top-1.5 w-3.5 h-3.5 bg-white border-2 rounded-sm cursor-ne-resize opacity-50"
+                            style={{ borderColor: "var(--platform-accent)" }}
+                          />
+                          <div
+                            className="absolute -left-1.5 -bottom-1.5 w-3.5 h-3.5 bg-white border-2 rounded-sm cursor-sw-resize opacity-50"
+                            style={{ borderColor: "var(--platform-accent)" }}
+                          />
+                        </>
                       )}
                     </div>
                   );
@@ -350,11 +446,11 @@ export default function TemplateEditorPage() {
 
                 if (layer.type === "cta") {
                   const ctaStyle = layerStyle as { bgColor?: string; textColor?: string; borderRadius?: number };
-                  const isEditing = editingLayerId === layer.id;
+                  const isSelected = editingLayerId === layer.id;
                   return (
                     <div
                       key={layer.id}
-                      className="absolute cursor-text transition-all duration-300"
+                      className="absolute transition-all duration-300"
                       style={{
                         left: layer.x * scale,
                         top: layer.y * scale,
@@ -368,16 +464,23 @@ export default function TemplateEditorPage() {
                         border: layer.borderColor
                           ? `${(layer.borderWidth || 2) * scale}px solid ${layer.borderColor}`
                           : "none",
-                        outline: isEditing ? "2px solid yellow" : "none",
-                        outlineOffset: "2px",
+                        outline: isSelected ? "2px solid rgba(255,255,255,0.6)" : "none",
+                        outlineOffset: "3px",
+                        cursor: dragging?.layerId === layer.id ? "grabbing" : "grab",
                       }}
-                      onClick={(e) => {
+                      onMouseDown={(e) => startDrag(e, layer)}
+                      onDoubleClick={(e) => {
                         e.stopPropagation();
                         setEditingLayerId(layer.id);
+                        (e.currentTarget as HTMLElement).contentEditable = "true";
+                        (e.currentTarget as HTMLElement).focus();
                       }}
-                      contentEditable={isEditing}
+                      contentEditable={false}
                       suppressContentEditableWarning
-                      onBlur={(e) => setLayerContent(layer.id, e.currentTarget.textContent || "")}
+                      onBlur={(e) => {
+                        setLayerContent(layer.id, e.currentTarget.textContent || "");
+                        (e.currentTarget as HTMLElement).contentEditable = "false";
+                      }}
                     >
                       {getLayerContent(layer)}
                     </div>
@@ -397,7 +500,11 @@ export default function TemplateEditorPage() {
                         fontWeight: "700",
                         fontFamily: logoStyle.fontFamily || layer.fontFamily,
                         color: logoStyle.color || layer.color,
+                        cursor: dragging?.layerId === layer.id ? "grabbing" : "grab",
+                        outline: editingLayerId === layer.id ? "2px solid rgba(255,255,255,0.6)" : "none",
+                        outlineOffset: "3px",
                       }}
+                      onMouseDown={(e) => startDrag(e, layer)}
                     >
                       {tokens.logoText}
                     </div>
