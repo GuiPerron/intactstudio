@@ -83,3 +83,178 @@ body {
 .stagger-children > *:nth-child(4) { animation-delay: 240ms; }
 .stagger-children > *:nth-child(5) { animation-delay: 320ms; }
 .stagger-children > *:nth-child(6) { animation-delay: 400ms; }
+
+/* ── Markdown body styling ── */
+.markdown-body {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--platform-text);
+}
+
+.markdown-body > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-body > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Headings */
+.markdown-body h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--platform-border);
+}
+
+.markdown-body h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraphs */
+.markdown-body p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Bold */
+.markdown-body strong {
+  font-weight: 650;
+}
+
+/* Lists */
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-body ul {
+  list-style-type: disc;
+}
+
+.markdown-body ol {
+  list-style-type: decimal;
+}
+
+.markdown-body li {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+  padding-left: 0.25rem;
+}
+
+.markdown-body li > ul,
+.markdown-body li > ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+  margin: 1rem 0;
+  padding: 0.75rem 1.25rem;
+  border-left: 3px solid var(--platform-accent);
+  background: var(--platform-sand);
+  border-radius: 0 8px 8px 0;
+  color: var(--platform-muted);
+  font-style: italic;
+}
+
+.markdown-body blockquote p {
+  margin: 0.25rem 0;
+}
+
+/* Code */
+.markdown-body code {
+  font-size: 13px;
+  background: var(--platform-sand);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.markdown-body pre {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  background: #1a1a1a;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+  color: #e5e5e5;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Tables */
+.markdown-body table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--platform-border);
+  font-size: 14px;
+}
+
+.markdown-body thead {
+  background: var(--platform-sand);
+}
+
+.markdown-body th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--platform-border);
+}
+
+.markdown-body td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--platform-border);
+  vertical-align: top;
+}
+
+.markdown-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-body tbody tr:hover {
+  background: var(--platform-sand);
+}
+
+/* Horizontal rules */
+.markdown-body hr {
+  margin: 1.5rem 0;
+  border: none;
+  border-top: 1px solid var(--platform-border);
+}
+
+/* Links */
+.markdown-body a {
+  color: var(--platform-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-body a:hover {
+  opacity: 0.8;
+}

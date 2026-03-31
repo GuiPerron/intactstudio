@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface BrainstormMessageProps {
   role: "user" | "assistant";
@@ -29,7 +30,10 @@ export function BrainstormMessage({
     <div className="animate-fade-in-up">
       <div className="flex items-start gap-4">
         {/* Agent avatar */}
-        <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold" style={{ backgroundColor: "var(--platform-accent)" }}>
+        <div
+          className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+          style={{ backgroundColor: "var(--platform-accent)" }}
+        >
           SA
         </div>
 
@@ -42,9 +46,13 @@ export function BrainstormMessage({
             </span>
           </div>
 
-          <div className="rounded-2xl rounded-tl-sm bg-white border border-[var(--platform-border)] px-6 py-4 shadow-sm">
-            <div className={`prose prose-sm max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-h1:text-lg prose-h1:mt-4 prose-h1:mb-2 prose-h2:text-base prose-h2:mt-3 prose-h2:mb-1.5 prose-h3:text-sm prose-h3:mt-2 prose-h3:mb-1 prose-p:my-2 prose-p:leading-relaxed prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5 prose-blockquote:border-l-2 prose-blockquote:border-[var(--platform-accent)] prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-[var(--platform-muted)] prose-strong:font-semibold prose-code:rounded prose-code:bg-[var(--platform-sand)] prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[13px] prose-code:before:content-none prose-code:after:content-none prose-hr:my-4 prose-hr:border-[var(--platform-border)] ${isStreaming ? "typing-cursor" : ""}`}>
-              <ReactMarkdown>{content}</ReactMarkdown>
+          <div
+            className={`rounded-2xl rounded-tl-sm bg-white border border-[var(--platform-border)] px-7 py-5 shadow-sm ${isStreaming ? "typing-cursor" : ""}`}
+          >
+            <div className="markdown-body">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content}
+              </ReactMarkdown>
             </div>
           </div>
         </div>

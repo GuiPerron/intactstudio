@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { BrandId, brands } from "@/lib/brand/config";
 
 interface ChatMessageProps {
@@ -30,7 +31,7 @@ export function ChatMessage({ role, content, brand }: ChatMessageProps) {
 
       {/* Message */}
       <div
-        className={`max-w-[75%] rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed ${
+        className={`max-w-[75%] rounded-2xl px-6 py-4 text-[15px] leading-relaxed ${
           isUser ? "rounded-tr-sm" : "rounded-tl-sm"
         }`}
         style={{
@@ -43,8 +44,8 @@ export function ChatMessage({ role, content, brand }: ChatMessageProps) {
         {isUser ? (
           <p>{content}</p>
         ) : (
-          <div className="prose prose-sm max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5 prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-[var(--platform-muted)] prose-strong:font-semibold prose-code:rounded prose-code:bg-black/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[13px] prose-code:before:content-none prose-code:after:content-none">
-            <ReactMarkdown>{content}</ReactMarkdown>
+          <div className="markdown-body">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
         )}
       </div>
