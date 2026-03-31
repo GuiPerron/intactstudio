@@ -11,23 +11,23 @@ const DEMOS = {
     name: "Intact Insurance",
     color: "#DF0030",
     bg: "#F7F2EA",
-    headline: "[ Votre maison, votre refuge ]",
-    body: "Les petits moments comptent autant que les grands. Chez Intact, nous protégeons tout ce qui vous importe — votre maison, votre auto, votre vie. Parce que quand vous êtes tranquille, vous prospérez.",
-    cta: "Découvrir nos protections",
+    headline: "[ Votre refuge. Notre promesse. ]",
+    body: "On protège ce qui compte vraiment pour vous.",
+    cta: "En savoir plus",
     ctaStyle: "bg-[#DF0030] text-white",
     font: "serif",
-    tagline: "For Everything You Care About",
+    tagline: "Pour tout ce qui compte",
   },
   belairdirect: {
     name: "belairdirect",
     color: "#C8102E",
     bg: "#F5F8FA",
-    headline: "Ton assurance, simplifiée.",
-    body: "Pas besoin de naviguer un labyrinthe. Obtiens ta soumission en 5 minutes, gère ta police depuis ton cell, et si jamais t'as besoin de nous — on est là, direct. Pas de détour.",
+    headline: "Simple. Direct. Couvert.",
+    body: "Ta soumission en 5 minutes. Zéro détour.",
     cta: "Obtenir ma soumission",
     ctaStyle: "bg-[#0F68D8] text-white",
     font: "sans",
-    tagline: "insurance. simplified.",
+    tagline: "assurance. simplifiée.",
   },
 };
 
@@ -122,8 +122,8 @@ export function DemoBrandVoice({ onComplete }: DemoBrandVoiceProps) {
         <div className="px-5 py-3 border-t border-[var(--platform-border)] bg-[var(--platform-sand)]">
           <p className="text-xs text-[var(--platform-muted)]">
             {activeBrand === "intact"
-              ? "🔴 Ton chaleureux, brackets rouges [ ], fond Soothing Sand, CTA rouge — voix Intact"
-              : "🔵 Ton direct et joueur, pas de brackets, fond neutre, CTA bleu — voix belairdirect"}
+              ? "🔴 Ton chaleureux · Brackets rouges [ ] · Fond sable · CTA rouge"
+              : "🔵 Ton direct et joueur · Pas de brackets · Fond neutre · CTA bleu"}
           </p>
         </div>
       </div>
