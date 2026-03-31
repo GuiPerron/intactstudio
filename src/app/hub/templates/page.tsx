@@ -20,7 +20,7 @@ export default function TemplateEditorPage() {
   const [activeFormat, setActiveFormat] = useState<FormatKey>(TEMPLATES[0].format);
   const [editedLayers, setEditedLayers] = useState<Record<string, Record<string, string>>>({});
   const [editingLayerId, setEditingLayerId] = useState<string | null>(null);
-  const [filterBrand] = useState<"all" | BrandKey>("all");
+  const filterBrand: "all" | BrandKey = "all";
   const [aiTemplate, setAiTemplate] = useState<Template | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
